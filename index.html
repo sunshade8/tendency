@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정치 성향 테스트 - 시작</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <!-- Favicon can be added later -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <base href="/">
+</head>
+<body>
+  <div id="app">
+    <div class="page start-page active">
+      <div class="logo">
+        <div class="logo-img"></div>
+      </div>
+      <div class="main-title-container">
+        <h1 class="main-title">나는 보수일까<br>진보일까?</h1>
+      </div>
+      <a href="/questions" class="start-btn" id="start-test-btn">테스트 시작하기</a>
+    </div>
+  </div>
+  <script>
+    // Logo click event
+    document.querySelector('.logo').addEventListener('click', function() {
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정치 성향 테스트 - 결과</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <style>
+    /* Override global overflow settings for the result page */
+    body, #app {
+      overflow: auto !important;
+      background-color: black;
+      color: white;
+    }
+    
+    .result-preview {
+      padding-bottom: 50px; /* Add some padding at the bottom for better scrolling */
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Adjustments to match the provided image */
+    .tendency-category {
+      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 20px;
+      text-align: center;
+      width: 100%; /* Full width of the container */
+      display: flex;
+      justify-content: center; /* Center the content horizontally */
+    }
+    
+    .opinion-labels {
+      display: none; /* Hide the opinion labels as they're not in the image */
+    }
+    
+    /* New layout structure */
+    .bar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 80%;
+      margin: 0 auto;
+    }
+    
+    .left-percentage, .right-percentage {
+      font-size: 14px;
+      text-align: center;
+      width: 15%;
+    }
+    
+    .progress-container {
+      height: 18px;
+      background-color: #333;
+      border-radius: 30px; /* Changed from 5px to 30px */
+      width: 80%;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      border-radius: 30px; /* Changed from 5px to 30px */
+    }
+    
+    /* Tendency labels below percentages */
+    .tendency-labels {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      margin: 6px auto 20px;
+      align-items: center; /* Added to vertically center the labels */
+    }
+    
+    .left-label, .right-label {
+      font-size: 14px;
+      text-align: center;
+      width: 15%;
+      display: flex; /* Added to improve vertical alignment */
+      align-items: center; /* Added to vertically center the text */
+      justify-content: center; /* Added to horizontally center the text */
+      height: 20px; /* Added fixed height for consistency */
+    }
+    
+    /* Empty center to align with progress bar */
+    .center-space {
+      width: 60%;
+    }
+    
+    .share-text {
+      margin-top: 40px;
+      font-size: 16px;
+      text-align: center;
+    }
+    
+    .share-btn, .follow-btn {
+      min-width: 150px;
+      padding: 12px 20px;
+      margin: 15px auto;
+      border-radius: 25px;
+      background-color: white;
+      color: black;
+      text-align: center;
+      font-weight: bold;
+      text-decoration: none;
+      display: block;
+    }
+    
+    /* Result character styling */
+    
+    /* Tendency name styling */
+    .tendency-name {
+      font-size: 40px;
+      font-weight: bold;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    /* Result title styling */
+    .result-title {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 0;
+      text-align: center;
+    }
+    
+    /* Logo styling - restored to match other pages */
+    .logo {
+      text-align: left;
+      margin: 20px 0;
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+      position: relative;
+    }
+    
+    .logo-img {
+      width: 60px;
+      height: 25px;
+      background-image: url('images/logo.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: left center;
+      margin: 0;
+      cursor: pointer;
+    }
+    
+    /* Footer styling */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+    
+    /* Additional info styling */
+    .additional-info {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="page result-preview active">
+      <div class="logo">
+        <div class="logo-img"></div>
+      </div>
+      <p class="result-title">당신은</p>
+      <p class="tendency-name" id="tendency-name">중도보수입니다!</p>
+      <div class="result-character" id="result-character" style="margin-bottom: 50px;"></div>
+      
+      <div class="tendency-bar" style="margin-bottom: 10px;">
+        <div class="tendency-category" style="margin-bottom: 20px;">
+          <span>경제/복지</span>
+        </div>
+        <div class="bar-container">
+          <span class="left-percentage" id="economic-left"style="font-size: 20px; font-weight: bold;">50%</span>
+          <div class="progress-container">
+            <div class="progress-left" id="economic-bar-left"></div>
+            <div class="progress-right" id="economic-bar-right"></div>
+          </div>
+          <span class="right-percentage" id="economic-right"style="font-size: 20px; font-weight: bold;">50%</span>
+        </div>
+        <div class="tendency-labels">
+          <div class="left-label">진보</div>
+          <div class="center-space"></div>
+          <div class="right-label">보수</div>
+        </div>
+      </div>
+      
+      <div class="tendency-bar" style="margin-bottom: 10px;">
+        <div class="tendency-category" style="margin-bottom: 20px;">
+          <span>안보/외교</span>
+        </div>
+        <div class="bar-container">
+          <span class="left-percentage" id="security-left"style="font-size: 20px; font-weight: bold;">50%</span>
+          <div class="progress-container">
+            <div class="progress-left" id="security-bar-left"></div>
+            <div class="progress-right" id="security-bar-right"></div>
+          </div>
+          <span class="right-percentage" id="security-right"style="font-size: 20px; font-weight: bold;">50%</span>
+        </div>
+        <div class="tendency-labels">
+          <div class="left-label">진보</div>
+          <div class="center-space"></div>
+          <div class="right-label">보수</div>
+        </div>
+      </div>
+      
+      <div class="tendency-bar" style="margin-bottom: 10px;">
+        <div class="tendency-category" style="margin-bottom: 20px;">
+          <span>사회/문화</span>
+        </div>
+        <div class="bar-container">
+          <span class="left-percentage" id="social-left"style="font-size: 20px; font-weight: bold;">50%</span>
+          <div class="progress-container">
+            <div class="progress-left" id="social-bar-left"></div>
+            <div class="progress-right" id="social-bar-right"></div>
+          </div>
+          <span class="right-percentage" id="social-right"style="font-size: 20px; font-weight: bold;">50%</span>
+        </div>
+        <div class="tendency-labels">
+          <div class="left-label">진보</div>
+          <div class="center-space"></div>
+          <div class="right-label">보수</div>
+        </div>
+      </div>
+      
+      <div class="tendency-bar" style="margin-bottom: 10px;">
+        <div class="tendency-category">
+          <span>환경/에너지</span>
+        </div>
+        <div class="bar-container">
+          <span class="left-percentage" id="environment-left"style="font-size: 20px; font-weight: bold;">50%</span>
+          <div class="progress-container">
+            <div class="progress-left" id="environment-bar-left"></div>
+            <div class="progress-right" id="environment-bar-right"></div>
+          </div>
+          <span class="right-percentage" id="environment-right"style="font-size: 20px; font-weight: bold;">50%</span>
+        </div>
+        <div class="tendency-labels">
+          <div class="left-label">진보</div>
+          <div class="center-space"></div>
+          <div class="right-label">보수</div>
+        </div>
+      </div>
+      
+      <div class="tendency-bar" style="margin-bottom: 10px;">
+        <div class="tendency-category" style="margin-bottom: 20px;">
+          <span>법/치안/기타</span>
+        </div>
+        <div class="bar-container">
+          <span class="left-percentage" id="law-left"style="font-size: 20px; font-weight: bold;">50%</span>
+          <div class="progress-container">
+            <div class="progress-left" id="law-bar-left"></div>
+            <div class="progress-right" id="law-bar-right"></div>
+          </div>
+          <span class="right-percentage" id="law-right"style="font-size: 20px; font-weight: bold;">50%</span>
+        </div>
+        <div class="tendency-labels">
+          <div class="left-label">진보</div>
+          <div class="center-space"></div>
+          <div class="right-label">보수</div>
+        </div>
+      </div>
+      
+      <p class="share-text" style="font-size: 20px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
+      <a href="#" id="share-btn" class="share-btn" style="margin-bottom: 100px;">링크 공유하기</a>
+      
+      
+  
+  <script>
+    // Load results from local storage
+    document.addEventListener('DOMContentLoaded', function() {
+      const resultsJSON = localStorage.getItem('surveyResults');
+      
+      if (!resultsJSON) {
+        // No results, redirect to start
+        alert('테스트 결과가 없습니다. 처음부터 다시 시작해주세요.');
+        window.location.href = '/';
+        return;
+      }
+      
+      const results = JSON.parse(resultsJSON);
+      
+      // Update tendency name
+      const tendencyNameElem = document.getElementById('tendency-name');
+      if (tendencyNameElem && results.tendencyType) {
+        tendencyNameElem.innerHTML = `<span style="color: var(--point-color)">${results.tendencyType}</span><span style="color: #fff">입니다!</span>`;
+      }
+      
+      // Update progress bars and percentages
+      updateBar('economic', results.economic);
+      updateBar('security', results.security);
+      updateBar('social', results.social);
+      updateBar('environment', results.environment);
+      updateBar('law', results.law);
+      
+      // Update character image
+      updateCharacterImage(results.tendencyType);
+      
+      // Setup share button
+      document.getElementById('share-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        shareResults(results.tendencyType);
+      });
+    });
+    
+    function updateBar(category, value) {
+      const leftBar = document.getElementById(`${category}-bar-left`);
+      const rightBar = document.getElementById(`${category}-bar-right`);
+      const leftPercentage = document.getElementById(`${category}-left`);
+      const rightPercentage = document.getElementById(`${category}-right`);
+      // Find the labels for this bar
+      const barContainer = leftBar ? leftBar.closest('.tendency-bar') : null;
+      const leftLabel = barContainer ? barContainer.querySelector('.left-label') : null;
+      const rightLabel = barContainer ? barContainer.querySelector('.right-label') : null;
+
+      if (leftBar && rightBar) {
+        const left = 100 - value;
+        const right = value;
+        leftBar.style.width = left + '%';
+        rightBar.style.width = right + '%';
+        leftBar.style.height = '100%';
+        rightBar.style.height = '100%';
+        leftBar.style.display = 'inline-block';
+        rightBar.style.display = 'inline-block';
+        leftBar.style.float = 'left';
+        rightBar.style.float = 'left';
+        if (left > right) {
+          leftBar.style.backgroundColor = '#0071E9'; // 진보 wins
+          rightBar.style.backgroundColor = '#8C8C8C'; // 보수 loses
+          if (leftLabel) leftLabel.style.color = '#FFFFFF';
+          if (rightLabel) rightLabel.style.color = '';
+        } else if (right > left) {
+          leftBar.style.backgroundColor = '#8C8C8C'; // 진보 loses
+          rightBar.style.backgroundColor = '#F8029E'; // 보수 wins
+          if (rightLabel) rightLabel.style.color = '#FFFFFF';
+          if (leftLabel) leftLabel.style.color = '';
+        } else {
+          leftBar.style.backgroundColor = '#BDBDBD';
+          rightBar.style.backgroundColor = '#BDBDBD';
+          if (leftLabel) leftLabel.style.color = '';
+          if (rightLabel) rightLabel.style.color = '';
+        }
+      }
+      if (leftPercentage) leftPercentage.textContent = `${Math.round(100 - value)}%`;
+      if (rightPercentage) rightPercentage.textContent = `${Math.round(value)}%`;
+      if (leftPercentage && rightPercentage) {
+        if ((100 - value) > value) {
+          leftPercentage.style.color = '';
+          rightPercentage.style.color = '#A9A9A9';
+        } else if (value > (100 - value)) {
+          rightPercentage.style.color = '';
+          leftPercentage.style.color = '#A9A9A9';
+        } else {
+          leftPercentage.style.color = '';
+          rightPercentage.style.color = '';
+        }
+      }
+    }
+    
+    function updateCharacterImage(tendencyType) {
+      const characterImage = document.getElementById('result-character');
+      let characterImagePath = '';
+      let pointColor = '#FF00A1'; // Default color
+      
+      switch(tendencyType) {
+        case '극우보수':
+          characterImagePath = 'images/character-conservative.png';
+          pointColor = '#FF0051';
+          break;
+        case '중도보수':
+          characterImagePath = 'images/character-moderate-conservative.png';
+          pointColor = '#FF00A1';
+          break;
+        case '중도':
+          characterImagePath = 'images/character-moderate.png';
+          pointColor = '#BDBDBD';
+          break;
+        case '중도진보':
+          characterImagePath = 'images/character-moderate-progressive.png';
+          pointColor = '#00D0FF';
+          break;
+        case '극좌진보':
+          characterImagePath = 'images/character-progressive.png';
+          pointColor = '#007BFF';
+          break;
+      }
+      
+      if (characterImagePath && characterImage) {
+        characterImage.style.backgroundImage = `url('${characterImagePath}')`;
+        characterImage.style.backgroundSize = 'contain';
+        characterImage.style.backgroundPosition = 'center';
+        characterImage.style.backgroundRepeat = 'no-repeat';
+        characterImage.style.width = '200px';
+        characterImage.style.height = '200px';
+      }
+      
+      // Update the point color
+      document.documentElement.style.setProperty('--point-color', pointColor);
+      
+      // Update color for tendency name
+      const tendencyNameElem = document.getElementById('tendency-name');
+      if (tendencyNameElem) {
+        tendencyNameElem.style.color = pointColor;
+      }
+      
+      // Update progress bars
+      const progressBars = document.querySelectorAll('.progress-bar');
+      progressBars.forEach(bar => {
+        bar.style.backgroundColor = pointColor;
+      });
+      
+      // Update pulseGlow animation dynamically
+      updatePulseGlowAnimation(pointColor);
+    }
+    
+    function updatePulseGlowAnimation(color) {
+      // Remove any existing dynamic style
+      const existingStyle = document.getElementById('dynamic-pulse-style');
+      if (existingStyle) {
+        existingStyle.remove();
+      }
+      
+      // Create a new style element with the customized animation
+      const style = document.createElement('style');
+      style.id = 'dynamic-pulse-style';
+      style.textContent = `
+        @keyframes pulseGlow {
+          0% { text-shadow: 0 0 5px ${color}80; }
+          50% { text-shadow: 0 0 20px ${color}CC; }
+          100% { text-shadow: 0 0 5px ${color}80; }
+        }
+        
+        .tendency-name {
+          animation: pulseGlow 2s infinite;
+        }
+      `;
+      
+      document.head.appendChild(style);
+    }
+    
+    function shareResults(tendencyType) {
+      // Get the start page URL (remove any path and just use the domain)
+      const startUrl = window.location.origin;
+      
+      // Check if Web Share API is available
+      if (navigator.share) {
+        navigator.share({
+          title: '정치 성향 테스트',
+          text: '친구들이랑 같이 해보세요!',
+          url: startUrl
+        })
+        .then(() => console.log('Shared successfully'))
+        .catch((error) => console.log('Error sharing:', error));
+      } else {
+        // Fallback for browsers that don't support the Web Share API
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(startUrl)
+            .then(() => {
+              alert('클립보드에 복사되었습니다. 원하는 곳에 붙여넣기 하세요.');
+            })
+            .catch(err => {
+              console.error('클립보드 복사 실패:', err);
+              alert('공유 기능을 사용할 수 없습니다.');
+            });
+        } else {
+          alert('공유 기능을 지원하지 않는 브라우저입니다.');
+        }
+      }
+    }
+    
+    // Logo click event
+    document.querySelector('.logo').addEventListener('click', function() {
+      if (confirm('테스트를 처음부터 다시 시작하시겠습니까?')) {
+        window.location.href = '/';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>정치 성향 테스트 - 설문</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <div id="app">
+    <div class="page survey-page active">
+      <div class="logo">
+        <div class="logo-img"></div>
+      </div>
+      <div id="questions-container">
+        <!-- Questions will be dynamically loaded here -->
+      </div>
+      <a href="#" id="check-results-btn" class="submit-btn" style="display: none;">결과 확인하기</a>
+      <div class="progress-bar-bottom">
+        <div class="progress-indicator" id="survey-progress"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Survey data
+    const surveyQuestions = [
+      // 경제/복지
+      {
+        id: 'q1',
+        text: '부유층에 대한 세율을 대폭 인상해야한다',
+        category: 'economic',
+        progressiveValue: true
+      },
+      {
+        id: 'q2',
+        text: '국가가 실업·산재 등 최소한의 사회안전망을 제공해야 한다',
+        category: 'economic',
+        progressiveValue: true
+      },
+      {
+        id: 'q3',
+        text: '시장 자율에 맡겨서 기업활동 규제를 최소화해야 한다',
+        category: 'economic',
+        progressiveValue: false
+      },
+      {
+        id: 'q4',
+        text: '기본소득(무조건적 현금지급)을 도입해야 한다',
+        category: 'economic',
+        progressiveValue: true
+      },
+      
+      // 안보/외교
+      {
+        id: 'q5',
+        text: '북한과의 대화와 협력을 우선해야 한다',
+        category: 'security',
+        progressiveValue: true
+      },
+      {
+        id: 'q6',
+        text: '강력한 한미동맹이 국가안보에 필수적이다',
+        category: 'security',
+        progressiveValue: false
+      },
+      
+      // 사회/문화
+      {
+        id: 'q7',
+        text: '동성결혼을 법적으로 인정해야 한다',
+        category: 'social',
+        progressiveValue: true
+      },
+      {
+        id: 'q8',
+        text: '전통적인 가족 가치는 사회의 기본이다',
+        category: 'social',
+        progressiveValue: false
+      },
+      
+      // 환경/에너지
+      {
+        id: 'q9',
+        text: '경제성장보다 환경보호가 우선되어야 한다',
+        category: 'environment',
+        progressiveValue: true
+      },
+      {
+        id: 'q10',
+        text: '원자력 발전은 확대되어야 한다',
+        category: 'environment',
+        progressiveValue: false
+      },
+      
+      // 법/치안/기타
+      {
+        id: 'q11',
+        text: '중대 범죄에 대한 처벌을 강화해야 한다',
+        category: 'law',
+        progressiveValue: false
+      },
+      {
+        id: 'q12',
+        text: '사형제도는 폐지되어야 한다',
+        category: 'law',
+        progressiveValue: true
+      }
+    ];
+    
+    // State variables
+    const state = {
+      surveyAnswers: {},
+      surveyProgress: 0
+    };
+    
+    // Create questions
+    function createQuestions() {
+      const questionsContainer = document.getElementById('questions-container');
+      
+      surveyQuestions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question-container';
+        questionDiv.id = question.id;
+        questionDiv.style.display = index === 0 ? 'flex' : 'none';
+        
+        questionDiv.innerHTML = `
+          <p class="question-text">${formatQuestionText(question.text)}</p>
+          <div class="opinion-scale">
+            <div class="opinion-option" data-value="1" data-question="${question.id}" onclick="selectOption(this, 1, '${question.id}')"></div>
+            <div class="opinion-option" data-value="2" data-question="${question.id}" onclick="selectOption(this, 2, '${question.id}')"></div>
+            <div class="opinion-option" data-value="3" data-question="${question.id}" onclick="selectOption(this, 3, '${question.id}')"></div>
+            <div class="opinion-option" data-value="4" data-question="${question.id}" onclick="selectOption(this, 4, '${question.id}')"></div>
+            <div class="opinion-option" data-value="5" data-question="${question.id}" onclick="selectOption(this, 5, '${question.id}')"></div>
+          </div>
+          <div class="opinion-labels">
+            <span class="left-label">매우 동의</span>
+            <span class="right-label">매우 비동의</span>
+          </div>
+        `;
+        
+        questionsContainer.appendChild(questionDiv);
+      });
+    }
+    
+    // Select option
+    function selectOption(element, value, questionId) {
+      // Remove selection from other options in the same question
+      document.querySelectorAll(`.opinion-option[data-question="${questionId}"]`).forEach(opt => {
+        opt.classList.remove('selected');
+      });
+      
+      // Add selection to clicked option
+      element.classList.add('selected');
+      
+      // Save answer
+      state.surveyAnswers[questionId] = value;
+      
+      // Update progress
+      updateSurveyProgress();
+      
+      // Move to next question with a slight delay for animation
+      const currentIndex = surveyQuestions.findIndex(q => q.id === questionId);
+      if (currentIndex < surveyQuestions.length - 1) {
+        setTimeout(() => {
+          document.getElementById(questionId).style.display = 'none';
+          document.getElementById(surveyQuestions[currentIndex + 1].id).style.display = 'flex';
+        }, 300);
+      }
+    }
+    
+    // Update survey progress
+    function updateSurveyProgress() {
+      const answeredCount = Object.keys(state.surveyAnswers).length;
+      const totalQuestions = surveyQuestions.length;
+      state.surveyProgress = (answeredCount / totalQuestions) * 100;
+      
+      const progressBar = document.getElementById('survey-progress');
+      if (progressBar) {
+        progressBar.style.width = `${state.surveyProgress}%`;
+      }
+      
+      // Show or hide submit button based on progress
+      const submitBtn = document.getElementById('check-results-btn');
+      if (submitBtn) {
+        submitBtn.style.display = answeredCount === totalQuestions ? 'block' : 'none';
+      }
+    }
+    
+    // Format question text for better line breaks
+    function formatQuestionText(text) {
+      if (!text || text.length < 10) return text;
+      
+      // For longer text, try to find a good breaking point
+      const midpoint = Math.floor(text.length / 2);
+      
+      // Try to find a space near the midpoint
+      let breakIndex = -1;
+      for (let i = 0; i < 10; i++) {
+        // Check increasingly farther from the midpoint
+        const checkIndex = text.indexOf(' ', midpoint - i);
+        if (checkIndex !== -1 && checkIndex <= midpoint + i) {
+          breakIndex = checkIndex;
+          break;
+        }
+      }
+      
+      if (breakIndex !== -1) {
+        return text.substring(0, breakIndex) + '<br>' + text.substring(breakIndex + 1);
+      }
+      
+      return text;
+    }
+    
+    // Store results in local storage and redirect to analyzing page
+    document.getElementById('check-results-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Calculate category results
+      const results = calculateResults();
+      
+      // Store results in local storage
+      localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
+      localStorage.setItem('surveyResults', JSON.stringify(results));
+      
+      // Redirect to analyzing page
+      window.location.href = '/analyzing';
+    });
+    
+    // Calculate results
+    function calculateResults() {
+      // Group questions by category
+      const questionsByCategory = {};
+      surveyQuestions.forEach(question => {
+        if (!questionsByCategory[question.category]) {
+          questionsByCategory[question.category] = [];
+        }
+        questionsByCategory[question.category].push(question);
+      });
+      
+      // Results object
+      const results = {
+        economic: 0,
+        security: 0,
+        social: 0,
+        environment: 0,
+        law: 0
+      };
+      
+      // Calculate scores for each category
+      Object.keys(questionsByCategory).forEach(category => {
+        const questions = questionsByCategory[category];
+        let totalScore = 0;
+        
+        questions.forEach(question => {
+          const answer = state.surveyAnswers[question.id] || 3; // Default to middle if not answered
+          
+          // 1 is strongly agree, 5 is strongly disagree
+          // Transform to 0-100 scale where higher means more conservative
+          let score;
+          if (question.progressiveValue) {
+            // For progressive questions, agreeing (low values) means more progressive (low result)
+            score = ((answer - 1) / 4) * 100;
+          } else {
+            // For conservative questions, agreeing (low values) means more conservative (high result)
+            score = ((5 - answer) / 4) * 100;
+          }
+          
+          totalScore += score;
+        });
+        
+        // Average score for the category
+        results[category] = Math.round(totalScore / questions.length);
+      });
+      
+      // Calculate tendency type
+      const overallScore = Object.values(results).reduce((sum, score) => sum + score, 0) / Object.keys(results).length;
+      
+      let tendencyType;
+      if (overallScore >= 80) {
+        tendencyType = '극우보수';
+      } else if (overallScore >= 60) {
+        tendencyType = '중도보수';
+      } else if (overallScore >= 40) {
+        tendencyType = '중도';
+      } else if (overallScore >= 20) {
+        tendencyType = '중도진보';
+      } else {
+        tendencyType = '극좌진보';
+      }
+      
+      results.tendencyType = tendencyType;
+      
+      return results;
+    }
+    
+    // Logo click event
+    document.querySelector('.logo').addEventListener('click', function() {
+      // Ask for confirmation if answers exist
+      if (Object.keys(state.surveyAnswers).length > 0) {
+        if (confirm('테스트를 처음부터 다시 시작하시겠습니까? 현재 진행 상황은 저장되지 않습니다.')) {
+          window.location.href = '/';
+        }
+      } else {
+        window.location.href = '/';
+      }
+    });
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      createQuestions();
+    });
+  </script>
+</body>
+</html> 
