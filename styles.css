@@ -478,6 +478,8 @@ body {
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  width: 160px;
+  display: block;
 }
 
 .share-btn:hover {
@@ -499,12 +501,12 @@ body {
 }
 
 .follow-btn {
-  background-color: transparent;
-  color: white;
-  border: 1px solid white;
+  background-color: white;
+  color: black;
+  border: none;
   border-radius: 30px;
   padding: 12px 30px;
-  font-size: 16px;
+  font-size: 10px;
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
@@ -513,13 +515,15 @@ body {
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  width: 160px;
+  display: block;
 }
 
 .follow-btn:hover {
   transform: scale(1.05);
-  background-color: white;
-  color: black;
+  background-color: #eaeaea;
   text-decoration: none;
+  color: black;
 }
 
 .follow-btn:active {

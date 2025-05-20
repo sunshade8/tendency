@@ -43,7 +43,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 80%;
+      width: 80vw;
+      max-width: 500px;
       margin: 0 auto;
     }
     
@@ -57,7 +58,7 @@
       height: 18px;
       background-color: #333;
       border-radius: 30px; /* Changed from 5px to 30px */
-      width: 80%;
+      width: 70%;
       overflow: hidden;
     }
     
@@ -70,7 +71,8 @@
     .tendency-labels {
       display: flex;
       justify-content: space-between;
-      width: 80%;
+      width: 80vw;
+      max-width: 500px;
       margin: 6px auto 20px;
       align-items: center; /* Added to vertically center the labels */
     }
@@ -307,11 +309,15 @@
         
         const results = JSON.parse(resultsJSON);
         console.log("Parsed results:", results);
+        console.log("Result elements: result-content =", document.getElementById('result-content'), 
+                   ", tendency-name =", document.getElementById('tendency-name'),
+                   ", economic-bar-left =", document.getElementById('economic-bar-left')); // Debug check elements
         
         // Update tendency name
         const tendencyNameElem = document.getElementById('tendency-name');
         if (tendencyNameElem && results.tendencyType) {
           tendencyNameElem.innerHTML = `<span style="color: var(--point-color)">${results.tendencyType}</span><span style="color: #fff">입니다!</span>`;
+          console.log("Updated tendency name to:", results.tendencyType);
         }
         
         // Update progress bars and percentages
@@ -344,6 +350,8 @@
       const leftLabel = barContainer ? barContainer.querySelector('.left-label') : null;
       const rightLabel = barContainer ? barContainer.querySelector('.right-label') : null;
 
+      console.log(`Updating ${category} bar with value ${value}, elements:`, {leftBar, rightBar, leftPercentage, rightPercentage}); // Debug log
+
       if (leftBar && rightBar) {
         const left = 100 - value;
         const right = value;
@@ -371,6 +379,7 @@
           if (leftLabel) leftLabel.style.color = '';
           if (rightLabel) rightLabel.style.color = '';
         }
+        console.log(`Set ${category} bar styles: left=${left}%, right=${right}%`); // Debug log
       }
       if (leftPercentage) leftPercentage.textContent = `${Math.round(100 - value)}%`;
       if (rightPercentage) rightPercentage.textContent = `${Math.round(value)}%`;
@@ -394,7 +403,11 @@
       let pointColor = '#FF00A1'; // Default color
       
       switch(tendencyType) {
-        case '극우보수':
+        case '태극기':
+          characterImagePath = 'images/character-korea.png';
+          pointColor = '#FF0000'; // Korean flag red
+          break;
+        case '보수':
           characterImagePath = 'images/character-conservative.png';
           pointColor = '#FF0051';
           break;
@@ -410,9 +423,13 @@
           characterImagePath = 'images/character-moderate-progressive.png';
           pointColor = '#00D0FF';
           break;
-        case '극좌진보':
+        case '진보':
           characterImagePath = 'images/character-progressive.png';
           pointColor = '#007BFF';
+          break;
+        case '공산당원':
+          characterImagePath = 'images/character-communist.png';
+          pointColor = '#CC0000'; // Communist red
           break;
       }
       
@@ -421,8 +438,8 @@
         characterImage.style.backgroundSize = 'contain';
         characterImage.style.backgroundPosition = 'center';
         characterImage.style.backgroundRepeat = 'no-repeat';
-        characterImage.style.width = '200px';
-        characterImage.style.height = '200px';
+        characterImage.style.width = '250px';
+        characterImage.style.height = '250px';
       }
       
       // Update the point color
@@ -501,10 +518,7 @@
     
     // Logo click event
     document.querySelector('.logo').addEventListener('click', function() {
-      console.log("Logo clicked");
-      // Always ask for confirmation before redirecting from results
       if (confirm('테스트를 처음부터 다시 시작하시겠습니까?')) {
-        console.log("User confirmed restart, redirecting to start");
         window.location.href = '/';
       }
     });
