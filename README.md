@@ -1,62 +1,89 @@
 # Korean Political Tendency Test
 
-A web-based political tendency test that shows users where they fall on the political spectrum based on their answers to questions across different categories (economic, security, social, environment, law).
+A web application that helps users identify their political tendency through a questionnaire.
 
 ## Features
 
-- 4-page structure: start page, survey page, loading page, and results page
-- Responsive design for mobile and desktop
-- URL-based routing system (/start, /questions, /analyzing, /result)
-- Result sharing capabilities
-- Animated UI elements
+- Interactive questionnaire with 20 political statements
+- Real-time progress tracking
+- Categories: Economic, Security, Social, Environmental, and Law
+- Analysis of political tendency based on responses
+- Shareable results
 
-## Getting Started
+## Project Structure
+
+- `index.html`: Main entry page
+- `questions.html`: Questionnaire interface
+- `analyzing.html`: Loading page between questionnaire and results
+- `result.html`: Results display page
+- `styles.css`: Styling for all pages
+- `script.js`: Core functionality and logic
+- `api/`: Serverless API functions
+- `images/`: Character and UI images
+
+## Deployment to Vercel
+
+This project is configured for deployment on Vercel, with serverless API functions to handle question retrieval and result calculation.
 
 ### Prerequisites
 
-- Node.js 14 or later
-- npm or yarn
+- Node.js (version 14 or higher)
+- A Vercel account (sign up at [vercel.com](https://vercel.com))
+- Vercel CLI (included as a dev dependency)
 
-### Installation
+### Deployment Steps
 
-1. Clone the repository
-```bash
-git clone https://github.com/yourusername/tendency-test.git
-cd tendency-test
-```
+1. **Login to Vercel CLI**:
+   ```
+   npx vercel login
+   ```
 
-2. Install dependencies
-```bash
-npm install
-```
+2. **Deploy the application**:
+   ```
+   npm run deploy
+   ```
+   
+   Or directly with Vercel CLI:
+   ```
+   npx vercel
+   ```
 
-3. Start the server
-```bash
-npm start
-```
+3. **Set up environment variables** (if needed):
+   - Go to your Vercel project dashboard
+   - Navigate to Settings → Environment Variables
+   - Add any required environment variables
 
-4. Open your browser and navigate to `http://localhost:3000`
+4. **Make the deployment production-ready**:
+   ```
+   npx vercel --prod
+   ```
 
-### Development Mode
+### Important Deployment Notes
 
-For development with automatic restarts:
-```bash
-npm run dev
-```
+- The project uses serverless functions in the `/api` directory
+- Static assets are served directly by Vercel's CDN
+- The `vercel.json` file configures the routing and build settings
+- Ensure your frontend URLs point to the correct API endpoints
 
-## URL Routes
+## Local Development
 
-The application uses client-side routing with the following paths:
+1. **Install dependencies**:
+   ```
+   npm install
+   ```
 
-- `/start` - Start page
-- `/questions` - Survey page with questions
-- `/analyzing` - Loading/analysis page
-- `/result` - Results page
+2. **Start the development server**:
+   ```
+   npm run dev
+   ```
 
-## Deployment
-
-The application can be deployed to any static hosting service or Node.js hosting platforms like Vercel, Netlify, or Heroku.
+3. **Access the application**:
+   Open `http://localhost:3001` in your browser
 
 ## License
 
-This project is licensed under the MIT License. 
+[Specify your license here]
+
+## Credits
+
+[Your name/organization] 

@@ -135,22 +135,53 @@ window.followSocialMedia = function() {
 window.checkResults = function() {
   try {
     console.log('Submit button clicked');
-    // Calculate results
-    calculateResults();
-    
-    // Show loading page and change URL
+    // Navigate to analyzing page
     navigateTo('analyzing');
     
-    // Ensure result page is prepared before showing it
-    console.log('Preparing result page');
-    updateResultPage();
+    // Format answers for the API
+    const answers = Object.entries(state.surveyAnswers).map(([questionId, value]) => {
+      return { questionId, value };
+    });
     
-    // Use a shorter delay for mobile
-    console.log('Setting timer for result page display');
-    setTimeout(() => {
-      navigateTo('result');
-      console.log('Result page should now be displayed');
-    }, 1500);
+    // Call API to calculate results
+    fetch('/api/calculate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ answers })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Save the results
+      state.results = {
+        economic: data.economic,
+        security: data.security,
+        social: data.social,
+        environment: data.environment,
+        law: data.law
+      };
+      state.tendencyType = data.tendencyType;
+      
+      // Update result page with the data
+      updateResultPage();
+      
+      // Navigate to result page
+      setTimeout(() => {
+        navigateTo('result');
+        console.log('Result page should now be displayed');
+      }, 1500);
+    })
+    .catch(error => {
+      console.error('Error fetching results:', error);
+      alert('결과를 계산하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+      navigateTo('start');
+    });
   } catch (error) {
     console.error('Error in submit button handler:', error);
     alert('결과를 계산하는 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -418,7 +449,40 @@ function showPage(pageId) {
 function initSurvey() {
   state.surveyAnswers = {};
   state.surveyProgress = 0;
-  updateSurveyProgress();
+  
+  // Fetch questions from API
+  fetch('/api/questions')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // If we successfully get questions from the API, use them
+      if (data.questions && data.questions.length > 0) {
+        state.surveyQuestions = data.questions;
+        console.log('Questions loaded from API:', state.surveyQuestions.length);
+        
+        // Recreate the survey page with the new questions
+        const surveyPage = document.getElementById('survey-page');
+        if (surveyPage) {
+          // Clear existing content
+          surveyPage.innerHTML = '';
+          // Recreate the survey page
+          createSurveyPage();
+        }
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching questions:', error);
+      // Continue with the hardcoded questions on error
+      console.log('Using hardcoded questions as fallback');
+    })
+    .finally(() => {
+      // Update the progress bar
+      updateSurveyProgress();
+    });
 }
 
 function updateSurveyProgress() {
