@@ -171,107 +171,114 @@
       <div class="logo">
         <div class="logo-img"></div>
       </div>
-      <p class="result-title">당신은</p>
-      <p class="tendency-name" id="tendency-name">중도보수입니다!</p>
-      <div class="result-character" id="result-character" style="margin-bottom: 50px;"></div>
-      
-      <div class="tendency-bar" style="margin-bottom: 10px;">
-        <div class="tendency-category" style="margin-bottom: 20px;">
-          <span>경제/복지</span>
-        </div>
-        <div class="bar-container">
-          <span class="left-percentage" id="economic-left"style="font-size: 18px; font-weight: bold;">50%</span>
-          <div class="progress-container">
-            <div class="progress-left" id="economic-bar-left"></div>
-            <div class="progress-right" id="economic-bar-right"></div>
+      <div id="result-content" style="display:none">
+        <p class="result-title">당신은</p>
+        <p class="tendency-name" id="tendency-name">중도보수입니다!</p>
+        <div class="result-character" id="result-character" style="margin-bottom: 50px;"></div>
+        
+        <div class="tendency-bar" style="margin-bottom: 10px;">
+          <div class="tendency-category" style="margin-bottom: 20px;">
+            <span>경제/복지</span>
           </div>
-          <span class="right-percentage" id="economic-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          <div class="bar-container">
+            <span class="left-percentage" id="economic-left"style="font-size: 18px; font-weight: bold;">50%</span>
+            <div class="progress-container">
+              <div class="progress-left" id="economic-bar-left"></div>
+              <div class="progress-right" id="economic-bar-right"></div>
+            </div>
+            <span class="right-percentage" id="economic-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          </div>
+          <div class="tendency-labels">
+            <div class="left-label">진보</div>
+            <div class="center-space"></div>
+            <div class="right-label">보수</div>
+          </div>
         </div>
-        <div class="tendency-labels">
-          <div class="left-label">진보</div>
-          <div class="center-space"></div>
-          <div class="right-label">보수</div>
+        
+        <div class="tendency-bar" style="margin-bottom: 10px;">
+          <div class="tendency-category" style="margin-bottom: 20px;">
+            <span>안보/외교</span>
+          </div>
+          <div class="bar-container">
+            <span class="left-percentage" id="security-left"style="font-size: 18px; font-weight: bold;">50%</span>
+            <div class="progress-container">
+              <div class="progress-left" id="security-bar-left"></div>
+              <div class="progress-right" id="security-bar-right"></div>
+            </div>
+            <span class="right-percentage" id="security-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          </div>
+          <div class="tendency-labels">
+            <div class="left-label">진보</div>
+            <div class="center-space"></div>
+            <div class="right-label">보수</div>
+          </div>
         </div>
+        
+        <div class="tendency-bar" style="margin-bottom: 10px;">
+          <div class="tendency-category" style="margin-bottom: 20px;">
+            <span>사회/문화</span>
+          </div>
+          <div class="bar-container">
+            <span class="left-percentage" id="social-left"style="font-size: 18px; font-weight: bold;">50%</span>
+            <div class="progress-container">
+              <div class="progress-left" id="social-bar-left"></div>
+              <div class="progress-right" id="social-bar-right"></div>
+            </div>
+            <span class="right-percentage" id="social-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          </div>
+          <div class="tendency-labels">
+            <div class="left-label">진보</div>
+            <div class="center-space"></div>
+            <div class="right-label">보수</div>
+          </div>
+        </div>
+        
+        <div class="tendency-bar" style="margin-bottom: 10px;">
+          <div class="tendency-category">
+            <span>환경/에너지</span>
+          </div>
+          <div class="bar-container">
+            <span class="left-percentage" id="environment-left"style="font-size: 18px; font-weight: bold;">50%</span>
+            <div class="progress-container">
+              <div class="progress-left" id="environment-bar-left"></div>
+              <div class="progress-right" id="environment-bar-right"></div>
+            </div>
+            <span class="right-percentage" id="environment-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          </div>
+          <div class="tendency-labels">
+            <div class="left-label">진보</div>
+            <div class="center-space"></div>
+            <div class="right-label">보수</div>
+          </div>
+        </div>
+        
+        <div class="tendency-bar" style="margin-bottom: 10px;">
+          <div class="tendency-category" style="margin-bottom: 20px;">
+            <span>법/치안/기타</span>
+          </div>
+          <div class="bar-container">
+            <span class="left-percentage" id="law-left"style="font-size: 18px; font-weight: bold;">50%</span>
+            <div class="progress-container">
+              <div class="progress-left" id="law-bar-left"></div>
+              <div class="progress-right" id="law-bar-right"></div>
+            </div>
+            <span class="right-percentage" id="law-right"style="font-size: 18px; font-weight: bold;">50%</span>
+          </div>
+          <div class="tendency-labels">
+            <div class="left-label">진보</div>
+            <div class="center-space"></div>
+            <div class="right-label">보수</div>
+          </div>
+        </div>
+        
+        <p class="share-text" style="font-size: 20px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
+        <a href="#" id="share-btn" class="share-btn" style="margin-bottom: 100px;">링크 공유하기</a>
       </div>
       
-      <div class="tendency-bar" style="margin-bottom: 10px;">
-        <div class="tendency-category" style="margin-bottom: 20px;">
-          <span>안보/외교</span>
-        </div>
-        <div class="bar-container">
-          <span class="left-percentage" id="security-left"style="font-size: 18px; font-weight: bold;">50%</span>
-          <div class="progress-container">
-            <div class="progress-left" id="security-bar-left"></div>
-            <div class="progress-right" id="security-bar-right"></div>
-          </div>
-          <span class="right-percentage" id="security-right"style="font-size: 18px; font-weight: bold;">50%</span>
-        </div>
-        <div class="tendency-labels">
-          <div class="left-label">진보</div>
-          <div class="center-space"></div>
-          <div class="right-label">보수</div>
-        </div>
+      <div id="no-results-message" style="text-align: center; display: none; margin-top: 50px;">
+        <p style="font-size: 24px; margin-bottom: 30px;">테스트 결과가 없습니다</p>
+        <a href="/" class="start-btn" style="display: inline-block; margin-top: 20px;">테스트 시작하기</a>
       </div>
-      
-      <div class="tendency-bar" style="margin-bottom: 10px;">
-        <div class="tendency-category" style="margin-bottom: 20px;">
-          <span>사회/문화</span>
-        </div>
-        <div class="bar-container">
-          <span class="left-percentage" id="social-left"style="font-size: 18px; font-weight: bold;">50%</span>
-          <div class="progress-container">
-            <div class="progress-left" id="social-bar-left"></div>
-            <div class="progress-right" id="social-bar-right"></div>
-          </div>
-          <span class="right-percentage" id="social-right"style="font-size: 18px; font-weight: bold;">50%</span>
-        </div>
-        <div class="tendency-labels">
-          <div class="left-label">진보</div>
-          <div class="center-space"></div>
-          <div class="right-label">보수</div>
-        </div>
-      </div>
-      
-      <div class="tendency-bar" style="margin-bottom: 10px;">
-        <div class="tendency-category">
-          <span>환경/에너지</span>
-        </div>
-        <div class="bar-container">
-          <span class="left-percentage" id="environment-left"style="font-size: 18px; font-weight: bold;">50%</span>
-          <div class="progress-container">
-            <div class="progress-left" id="environment-bar-left"></div>
-            <div class="progress-right" id="environment-bar-right"></div>
-          </div>
-          <span class="right-percentage" id="environment-right"style="font-size: 18px; font-weight: bold;">50%</span>
-        </div>
-        <div class="tendency-labels">
-          <div class="left-label">진보</div>
-          <div class="center-space"></div>
-          <div class="right-label">보수</div>
-        </div>
-      </div>
-      
-      <div class="tendency-bar" style="margin-bottom: 10px;">
-        <div class="tendency-category" style="margin-bottom: 20px;">
-          <span>법/치안/기타</span>
-        </div>
-        <div class="bar-container">
-          <span class="left-percentage" id="law-left"style="font-size: 18px; font-weight: bold;">50%</span>
-          <div class="progress-container">
-            <div class="progress-left" id="law-bar-left"></div>
-            <div class="progress-right" id="law-bar-right"></div>
-          </div>
-          <span class="right-percentage" id="law-right"style="font-size: 18px; font-weight: bold;">50%</span>
-        </div>
-        <div class="tendency-labels">
-          <div class="left-label">진보</div>
-          <div class="center-space"></div>
-          <div class="right-label">보수</div>
-        </div>
-      </div>
-      
-      <p class="share-text" style="font-size: 20px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
-      <a href="#" id="share-btn" class="share-btn" style="margin-bottom: 100px;">링크 공유하기</a>
     </div>
   </div>
   
@@ -281,11 +288,15 @@
       const resultsJSON = localStorage.getItem('surveyResults');
       
       if (!resultsJSON) {
-        // No results, redirect to start
-        alert('테스트 결과가 없습니다. 처음부터 다시 시작해주세요.');
-        window.location.href = '/';
+        // No results, show message and start button
+        document.getElementById('no-results-message').style.display = 'block';
+        document.getElementById('result-content').style.display = 'none';
         return;
       }
+      
+      // Show results content
+      document.getElementById('result-content').style.display = 'block';
+      document.getElementById('no-results-message').style.display = 'none';
       
       const results = JSON.parse(resultsJSON);
       

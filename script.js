@@ -74,6 +74,13 @@ function navigateTo(path) {
     window.history.pushState({}, '', newPath);
   }
   
+  // Always clean up any potential duplicate pages
+  document.querySelectorAll('.page').forEach(page => {
+    if (page.classList.contains('active')) {
+      page.classList.remove('active');
+    }
+  });
+  
   // Handle the route change
   switch (path) {
     case 'start':
