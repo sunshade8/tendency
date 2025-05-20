@@ -200,6 +200,17 @@ window.checkResults = function() {
       };
       state.tendencyType = data.tendencyType;
       
+      // Save results to localStorage so result.html can access them
+      localStorage.setItem('surveyResults', JSON.stringify({
+        economic: data.economic,
+        security: data.security,
+        social: data.social,
+        environment: data.environment,
+        law: data.law,
+        tendencyType: data.tendencyType
+      }));
+      localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
+      
       // Update result page with the data
       updateResultPage();
       
