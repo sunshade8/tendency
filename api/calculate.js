@@ -48,13 +48,13 @@ export default function handler(request, response) {
                      results.environment + results.law) / 5;
     
     let tendencyType;
-    if (average > 75) {
+    if (average >= 80) {
       tendencyType = '극우보수';
-    } else if (average > 55) {
+    } else if (average >= 60) {
       tendencyType = '중도보수';
-    } else if (average > 45) {
+    } else if (average >= 40) {
       tendencyType = '중도';
-    } else if (average > 25) {
+    } else if (average >= 20) {
       tendencyType = '중도진보';
     } else {
       tendencyType = '극좌진보';
