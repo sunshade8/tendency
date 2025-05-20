@@ -201,23 +201,27 @@ window.checkResults = function() {
       state.tendencyType = data.tendencyType;
       
       // Save results to localStorage so result.html can access them
-      localStorage.setItem('surveyResults', JSON.stringify({
+      const resultsToSave = {
         economic: data.economic,
         security: data.security,
         social: data.social,
         environment: data.environment,
         law: data.law,
         tendencyType: data.tendencyType
-      }));
+      };
+      
+      console.log("Saving results to localStorage:", resultsToSave);
+      localStorage.setItem('surveyResults', JSON.stringify(resultsToSave));
       localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
       
       // Update result page with the data
       updateResultPage();
       
-      // Navigate to result page
+      // Instead of using navigateTo, which can cause issues, directly change window location
+      // after a delay to ensure localStorage is properly set
       setTimeout(() => {
-        navigateTo('result');
-        console.log('Result page should now be displayed');
+        window.location.href = '/result';
+        console.log('Redirecting to result page');
       }, 1500);
     })
     .catch(error => {

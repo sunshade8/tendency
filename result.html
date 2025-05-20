@@ -283,44 +283,55 @@
   </div>
   
   <script>
+    // Add debug logging to see what's happening
+    console.log("Result page loaded");
+
     // Load results from local storage
     document.addEventListener('DOMContentLoaded', function() {
+      console.log("DOM loaded on result page");
       const resultsJSON = localStorage.getItem('surveyResults');
+      console.log("Retrieved surveyResults from localStorage:", resultsJSON);
       
       if (!resultsJSON) {
         // No results, show message and start button
+        console.log("No results found in localStorage");
         document.getElementById('no-results-message').style.display = 'block';
         document.getElementById('result-content').style.display = 'none';
         return;
       }
       
-      // Show results content
-      document.getElementById('result-content').style.display = 'block';
-      document.getElementById('no-results-message').style.display = 'none';
-      
-      const results = JSON.parse(resultsJSON);
-      
-      // Update tendency name
-      const tendencyNameElem = document.getElementById('tendency-name');
-      if (tendencyNameElem && results.tendencyType) {
-        tendencyNameElem.innerHTML = `<span style="color: var(--point-color)">${results.tendencyType}</span><span style="color: #fff">입니다!</span>`;
+      try {
+        // Show results content
+        document.getElementById('result-content').style.display = 'block';
+        document.getElementById('no-results-message').style.display = 'none';
+        
+        const results = JSON.parse(resultsJSON);
+        console.log("Parsed results:", results);
+        
+        // Update tendency name
+        const tendencyNameElem = document.getElementById('tendency-name');
+        if (tendencyNameElem && results.tendencyType) {
+          tendencyNameElem.innerHTML = `<span style="color: var(--point-color)">${results.tendencyType}</span><span style="color: #fff">입니다!</span>`;
+        }
+        
+        // Update progress bars and percentages
+        updateBar('economic', results.economic);
+        updateBar('security', results.security);
+        updateBar('social', results.social);
+        updateBar('environment', results.environment);
+        updateBar('law', results.law);
+        
+        // Update character image
+        updateCharacterImage(results.tendencyType);
+        
+        // Setup share button
+        document.getElementById('share-btn').addEventListener('click', function(e) {
+          e.preventDefault();
+          shareResults(results.tendencyType);
+        });
+      } catch (err) {
+        console.error("Error processing results:", err);
       }
-      
-      // Update progress bars and percentages
-      updateBar('economic', results.economic);
-      updateBar('security', results.security);
-      updateBar('social', results.social);
-      updateBar('environment', results.environment);
-      updateBar('law', results.law);
-      
-      // Update character image
-      updateCharacterImage(results.tendencyType);
-      
-      // Setup share button
-      document.getElementById('share-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        shareResults(results.tendencyType);
-      });
     });
     
     function updateBar(category, value) {
@@ -490,7 +501,10 @@
     
     // Logo click event
     document.querySelector('.logo').addEventListener('click', function() {
+      console.log("Logo clicked");
+      // Always ask for confirmation before redirecting from results
       if (confirm('테스트를 처음부터 다시 시작하시겠습니까?')) {
+        console.log("User confirmed restart, redirecting to start");
         window.location.href = '/';
       }
     });
