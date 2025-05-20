@@ -147,7 +147,16 @@
   <script>
     // Redirect to results page after a delay
     setTimeout(function() {
-      window.location.href = '/result';
+      // Check if there are survey results in localStorage
+      const surveyResults = localStorage.getItem('surveyResults');
+      
+      if (surveyResults) {
+        // If results exist, redirect to result page
+        window.location.href = '/result';
+      } else {
+        // If no results, redirect to start page
+        window.location.href = '/start';
+      }
     }, 5000); // 5 seconds delay
   </script>
   
