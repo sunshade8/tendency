@@ -8,7 +8,7 @@ export const questions = [
   },
   {
     id: 'q2',
-    text: '부자들에게 더 많은 세금을 부과해야 한다',
+    text: '부자들에게 지금보다 더 많은 세금을 부과해야 한다',
     category: 'economic',
     progressiveValue: true
   },
@@ -20,7 +20,7 @@ export const questions = [
   },
   {
     id: 'q4',
-    text: '기본소득(무조건적 현금지급)을 도입해야 한다',
+    text: '기본소득을 도입해야 한다',
     category: 'economic',
     progressiveValue: true
   },

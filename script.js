@@ -241,45 +241,7 @@ const state = {
   currentPage: null,
   surveyAnswers: {},
   surveyProgress: 0,
-  surveyQuestions: [
-    // 경제/복지 (Economy/Welfare)
-{ id: 'q1', text: '부유층에 대한 세율을 대폭 인상해야한다', category: 'economic', progressiveValue: true },
-{ id: 'q2', text: '국가가 실업·산재 등 최소한의 사회안전망을 제공해야 한다', category: 'economic', progressiveValue: true },
-{ id: 'q3', text: '시장 자율에 맡겨서 기업활동 규제를 최소화해야 한다', category: 'economic', progressiveValue: false },
-{ id: 'q4', text: '기본소득(무조건적 현금지급)을 도입해야 한다', category: 'economic', progressiveValue: true },
-
-// 안보/외교 (Security/Diplomacy)
-{ id: 'q5', text: '북한과의 대화와 협력을 우선해야 한다', category: 'security', progressiveValue: true },
-{ id: 'q6', text: '강력한 한미동맹이 국가안보에 필수적이다', category: 'security', progressiveValue: false },
-{ id: 'q7', text: '국방비 증액은 현 시점에서 필수적이다', category: 'security', progressiveValue: false },
-{ id: 'q8', text: '주변국과의 경제적 협력이 군사적 견제보다 중요하다', category: 'security', progressiveValue: true },
-
-// 사회/문화 (Social/Cultural)
-{ id: 'q9', text: '동성결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },
-{ id: 'q10', text: '전통적인 가족 가치는 사회의 기본이다', category: 'social', progressiveValue: false },
-{ id: 'q11', text: '다문화 정책을 더욱 확대해야 한다', category: 'social', progressiveValue: true },
-{ id: 'q12', text: '징병제는 현행대로 유지되어야 한다', category: 'social', progressiveValue: false },
-
-// 환경/에너지 (Environment/Energy)
-{ id: 'q13', text: '경제성장보다 환경보호가 우선되어야 한다', category: 'environment', progressiveValue: true },
-{ id: 'q14', text: '원자력 발전은 확대되어야 한다', category: 'environment', progressiveValue: false },
-{ id: 'q15', text: '탄소중립을 위해 산업규제를 강화해야 한다', category: 'environment', progressiveValue: true },
-{ id: 'q16', text: '환경보호보다 일자리 창출이 더 시급하다', category: 'environment', progressiveValue: false },
-
-// 법/치안/기타 (Law/Public Safety/Others)
-{ id: 'q17', text: '중대 범죄에 대한 처벌을 강화해야 한다', category: 'law', progressiveValue: false },
-{ id: 'q18', text: '사형제도는 폐지되어야 한다', category: 'law', progressiveValue: true },
-{ id: 'q19', text: '마약 소지에 대한 처벌을 완화해야 한다', category: 'law', progressiveValue: true },
-{ id: 'q20', text: '공공장소 CCTV 설치를 확대해야 한다', category: 'law', progressiveValue: false }
-  ],
-  results: {
-    economic: 80,
-    security: 80,
-    social: 80,
-    environment: 80,
-    law: 80
-  },
-  tendencyType: '중도보수'
+  surveyQuestions: []  // Empty array, will be populated from API
 };
 
 // Page creation functions
@@ -519,12 +481,26 @@ function initSurvey() {
           // Recreate the survey page
           createSurveyPage();
         }
+      } else {
+        throw new Error('No questions received from API');
       }
     })
     .catch(error => {
       console.error('Error fetching questions:', error);
-      // Continue with the hardcoded questions on error
-      console.log('Using hardcoded questions as fallback');
+      
+      // Show error message if on survey page
+      const surveyPage = document.getElementById('survey-page');
+      if (surveyPage) {
+        surveyPage.innerHTML = `
+          <div class="logo">
+            <div class="logo-img"></div>
+          </div>
+          <div style="text-align: center; margin-top: 50px;">
+            <p>질문을 불러오는 데 문제가 발생했습니다.</p>
+            <button onclick="initSurvey()" style="padding: 10px 20px; margin-top: 20px;">다시 시도</button>
+          </div>
+        `;
+      }
     })
     .finally(() => {
       // Update the progress bar
