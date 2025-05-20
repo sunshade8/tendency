@@ -94,12 +94,28 @@ function navigateTo(path) {
 // Global functions for buttons
 window.startTest = function() {
   console.log('Start button clicked directly');
+  
+  // Track start test event
+  if (window.va) {
+    window.va('event', {
+      name: 'start_test'
+    });
+  }
+  
   navigateTo('questions');
 };
 
 window.shareResults = function() {
   // Construct share text
   const shareText = `나는 ${state.tendencyType}! 정치 성향 테스트 결과를 확인해보세요.`;
+  
+  // Track share results event
+  if (window.va) {
+    window.va('event', {
+      name: 'share_results',
+      data: { tendency_type: state.tendencyType }
+    });
+  }
   
   // Check if Web Share API is available
   if (navigator.share) {
@@ -135,6 +151,15 @@ window.followSocialMedia = function() {
 window.checkResults = function() {
   try {
     console.log('Submit button clicked');
+    
+    // Track submit answers event
+    if (window.va) {
+      window.va('event', {
+        name: 'submit_answers',
+        data: { question_count: Object.keys(state.surveyAnswers).length }
+      });
+    }
+    
     // Navigate to analyzing page
     navigateTo('analyzing');
     

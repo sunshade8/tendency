@@ -65,6 +65,21 @@ This project is configured for deployment on Vercel, with serverless API functio
 - The `vercel.json` file configures the routing and build settings
 - Ensure your frontend URLs point to the correct API endpoints
 
+### Vercel Analytics
+
+This project is configured with Vercel Analytics to track user interactions:
+
+1. **Automatic Page Views**: All page views are automatically tracked by the Vercel Analytics script
+2. **Custom Events**: The following custom events are tracked:
+   - `start_test`: When a user starts the test
+   - `submit_answers`: When a user submits their answers
+   - `share_results`: When a user shares their results
+
+To view analytics:
+1. Go to your Vercel project dashboard
+2. Navigate to Analytics
+3. You can view metrics like page views, visitors, and custom events
+
 ## Local Development
 
 1. **Install dependencies**:
