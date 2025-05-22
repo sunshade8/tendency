@@ -53,8 +53,8 @@
             <div class="opinion-option" data-value="5" data-question="${question.id}" onclick="selectOption(this, 5, '${question.id}')"></div>
           </div>
           <div class="opinion-labels">
-            <span class="left-label">매우 동의</span>
-            <span class="right-label">매우 비동의</span>
+            <span class="left-label">매우 비동의</span>
+            <span class="right-label">매우 동의</span>
           </div>
         `;
         
@@ -176,15 +176,15 @@
         questions.forEach(question => {
           const answer = state.surveyAnswers[question.id] || 3; // Default to middle if not answered
           
-          // 1 is strongly agree, 5 is strongly disagree
+          // Now: 1 is strongly disagree, 5 is strongly agree
           // Transform to 0-100 scale where higher means more conservative
           let score;
           if (question.progressiveValue) {
-            // For progressive questions, agreeing (low values) means more progressive (low result)
-            score = ((answer - 1) / 4) * 100;
-          } else {
-            // For conservative questions, agreeing (low values) means more conservative (high result)
+            // For progressive questions, agreeing (high values) means more progressive (low result)
             score = ((5 - answer) / 4) * 100;
+          } else {
+            // For conservative questions, agreeing (high values) means more conservative (high result)
+            score = ((answer - 1) / 4) * 100;
           }
           
           totalScore += score;
