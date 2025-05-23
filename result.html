@@ -274,12 +274,18 @@
             <div class="right-label">보수</div>
           </div>
         </div>
+        <a href="#" id="restart-btn" class="share-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 70px; margin-top: 30px;">
+          <img src="images/reset.png" alt="Reset" style="width: 20px; height: 20px;">
+          다시하기
+        </a>
+
+        <p class="share-text" style="font-size: 25px; margin-top: 70px; margin-bottom: 30px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
+        <a href="#" id="share-btn" class="share-btn">링크 공유하기</a>
         
-        <p class="share-text" style="font-size: 25px; margin-top: 70px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
-        <a href="#" id="share-btn" class="share-btn" style="margin-bottom: 70px;">링크 공유하기</a>
+       
         
-        <div style="width: 80vw; max-width: 500px; margin: 50px auto 0;">
-          <p class="share-text" style="font-size: 25px; font-weight: bold; text-align: left; margin: 0; padding-left: 5%;">편향적인 언론 말고<br>중립적인 뉴스를 보고 싶다면?</p>
+        <div style="width: 80vw; max-width: 500px; margin: 70px auto 0;">
+          <p class="share-text" style="font-size: 25px; font-weight: medium; text-align: center; margin: 0; padding: 0;"><span style="font-weight: bold;">편향적인</span> 언론 말고<br><span style="font-weight: bold;">중립적인</span> 뉴스를 보고 싶다면?</p>
         </div>
         
         <div class="media-info" style="display: flex; align-items: center; justify-content: center; margin-top: 50px; margin-bottom: 10px;">
@@ -289,7 +295,7 @@
         </div>
         <div class="instagram-follow" style="font-size: 20px; font-weight: medium; margin-top: 10px; text-align: center;">인스타그램 팔로우!</div>
         
-        <a href="https://www.instagram.com/median.ai/" target="_blank" class="share-btn" style="margin-bottom: 50px;">팔로우</a>
+        <a href="https://www.instagram.com/median.ai/" target="_blank" class="share-btn" style="margin-top: 30px; margin-bottom: 50px;">팔로우</a>
       </div>
       
       <div id="no-results-message" style="text-align: center; display: none; margin-top: 50px;">
@@ -349,6 +355,18 @@
         document.getElementById('share-btn').addEventListener('click', function(e) {
           e.preventDefault();
           shareResults(results.tendencyType);
+        });
+        
+        // Setup restart button
+        document.getElementById('restart-btn').addEventListener('click', function(e) {
+          e.preventDefault();
+          if (confirm('테스트를 다시 시작하시겠습니까? 현재 결과는 삭제됩니다.')) {
+            // Clear localStorage
+            localStorage.removeItem('surveyAnswers');
+            localStorage.removeItem('surveyResults');
+            // Redirect to home page
+            window.location.href = '/';
+          }
         });
       } catch (err) {
         console.error("Error processing results:", err);
