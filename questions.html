@@ -40,8 +40,7 @@
   #questions-container {
     position: relative;
     width: 100%;
-    /* MODIFIED: Reduced padding-top to shift questions up */
-    padding-top: 70px; /* Was 100px */
+    padding-top: 70px; /* Questions shifted up */
   }
 
   .question-container {
@@ -51,31 +50,37 @@
     transform: none !important;
     margin-bottom: 40px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
+  /* 원래 .submit-btn 스타일로 복원 (하단 고정형태). 이 버튼은 이제 직접 보이지 않게 됩니다. */
   .submit-btn {
+    /* styles.css에 정의된 원래 스타일을 따르거나, 여기서 명시적으로 하단 고정 스타일 지정 */
+    /* 예시: position: fixed; left: 50%; transform: translateX(-50%); */
+    /* 이 예제에서는 JavaScript로 이 버튼을 숨기므로, 구체적인 스타일링은 덜 중요해집니다. */
+    /* 하지만, 만약 styles.css에 position:fixed 와 bottom 이 있다면 그것이 적용될 것입니다. */
+    /* 사용자의 요청에 따라, 이 버튼 자체는 화면에 보이지 않도록 처리합니다. */
+    /* 아래는 원래 코드에 있던 bottom 값들입니다. */
     bottom: 300px !important; 
   }
+
 
   .progress-bar-bottom {
     z-index: 500; 
   }
-
-/* #app { /* This was a duplicated CSS rule block. Ensuring #app is defined once if needed. */
-/* overflow: visible !important; 
-/* } */
 
 
   @media screen and (max-width: 392px) {
     .survey-page {
       padding-bottom: 320px !important; 
     }
-    .submit-btn {
+    .submit-btn { /* 원래 코드의 bottom 값 */
       bottom: 280px !important;
     }
     #questions-container {
-      /* MODIFIED: Reduced padding-top for smaller screens */
-      padding-top: 50px; /* Was 80px */
+      padding-top: 50px; 
     }
   }
 
@@ -83,7 +88,7 @@
     .survey-page {
       padding-bottom: 260px !important; 
     }
-    .submit-btn {
+    .submit-btn { /* 원래 코드의 bottom 값 */
       bottom: 240px !important;
     }
     #character-ferris-wheel {
@@ -92,9 +97,6 @@
     #chatbot-message-log {
       max-height: 80px;
     }
-    /* You might also want to adjust padding-top for #questions-container here if 50px/70px is too much on very short screens */
-    /* Example for very short screens: */
-    /* #questions-container { padding-top: 40px; } */
   }
 
 .ferris-char-img,
@@ -194,6 +196,34 @@
       font-size: 16px; transition: background-color 0.2s;
     }
     #persistent-send-btn:hover { background-color: rgba(255, 255, 255, 0.3); } 
+
+    /* 마지막 질문 자리에 표시될 버튼 스타일 */
+    .final-results-btn-in-place {
+        display: block; 
+        width: calc(100% - 40px); 
+        max-width: 350px; 
+        margin: 0 auto 20px auto; /* 상단 마진은 question-container의 margin-bottom으로 처리될 수 있음 */
+        padding: 15px 20px;
+        background-color: #ffffff; 
+        color: rgb(0, 0, 0);
+        text-align: center;
+        text-decoration: none;
+        border-radius: 50px; 
+        font-size: 1.1em;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .final-results-btn-in-place:hover {
+        background-color: #ffffff;
+        transform: translateY(-2px);
+    }
+    .final-results-btn-in-place:active {
+        background-color: #ffffff;
+        transform: translateY(0px);
+    }
     
   </style>
 </head>
@@ -206,6 +236,7 @@
       <div id="questions-container">
         </div>
       <a href="#" id="check-results-btn" class="submit-btn" style="display: none;">결과 확인하기</a>
+      
       <div class="progress-bar-bottom">
         <div class="progress-indicator" id="survey-progress"></div>
       </div>
@@ -226,7 +257,7 @@
   </div>
   
   <script>
-    // --- ★★★ 원본 설문 JavaScript 로직 시작 (사용자님이 제공한 코드 - 절대 변경 없음) ★★★ ---
+    // --- ★★★ 원본 설문 JavaScript 로직 시작 ★★★ ---
     const state = {
       surveyQuestions: [],
       surveyAnswers: {},
@@ -241,7 +272,7 @@
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question-container';
         questionDiv.id = question.id;
-        questionDiv.style.display = index === 0 ? 'flex' : 'none';
+        questionDiv.style.display = index === 0 ? 'flex' : 'none'; // Keep 'flex' for question content alignment
         questionDiv.innerHTML = `
           <p class="question-text">${formatQuestionText(question.text)}</p>
           <div class="opinion-scale">
@@ -259,35 +290,86 @@
         questionsContainer.appendChild(questionDiv);
       });
     }
+
+    // MODIFIED selectOption
     function selectOption(element, value, questionId) {
       document.querySelectorAll(`.opinion-option[data-question="${questionId}"]`).forEach(opt => {
         opt.classList.remove('selected');
       });
       element.classList.add('selected');
       state.surveyAnswers[questionId] = value;
-      updateSurveyProgress();
+      
       const currentIndex = state.surveyQuestions.findIndex(q => q.id === questionId);
-      if (currentIndex < state.surveyQuestions.length - 1) {
+      const isLastQuestion = currentIndex === state.surveyQuestions.length - 1;
+
+      updateSurveyProgress(); // Update progress first (this will also handle showing the original submit button if logic remained)
+
+      if (isLastQuestion) {
+        console.log('[SURVEY] Last question answered. Replacing with button.');
+        const currentQuestionEl = document.getElementById(questionId);
+        if (currentQuestionEl) {
+          // currentQuestionEl.style.display = 'none'; // Hide the last question content
+          // Instead of hiding, replace its content or structure
+          currentQuestionEl.innerHTML = ''; // Clear existing question content
+          currentQuestionEl.style.display = 'block'; // Ensure it's block for button centering
+          currentQuestionEl.style.padding = '20px 0'; // Add some padding if needed
+
+          const resultsButtonInPlace = document.createElement('a');
+          resultsButtonInPlace.href = "#"; // Or actual link if not handled by global listener
+          resultsButtonInPlace.id = 'dynamic-check-results-btn'; // New ID
+          resultsButtonInPlace.className = 'final-results-btn-in-place'; // New class for styling
+          resultsButtonInPlace.textContent = '결과 확인하기';
+          
+          resultsButtonInPlace.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Re-use the existing result calculation and navigation logic
+            const results = calculateResults(); 
+            localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
+            localStorage.setItem('surveyResults', JSON.stringify(results));
+            console.log("[SURVEY] In-place button: Saved to localStorage, surveyResults =", JSON.stringify(results));
+            window.location.href = '/analyzing'; 
+          });
+          currentQuestionEl.appendChild(resultsButtonInPlace);
+          
+          // Scroll this new button into view
+          setTimeout(() => {
+            resultsButtonInPlace.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        }
+      } else {
+        // Not the last question, proceed to next question
         setTimeout(() => {
           const currentQuestionEl = document.getElementById(questionId);
           const nextQuestionEl = document.getElementById(state.surveyQuestions[currentIndex + 1].id);
           if (currentQuestionEl) currentQuestionEl.style.display = 'none';
-          if (nextQuestionEl) nextQuestionEl.style.display = 'flex';
+          if (nextQuestionEl) {
+            nextQuestionEl.style.display = 'flex'; // Assuming questions are flex containers
+            // Scroll new question into view
+            nextQuestionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }, 300);
       }
     }
+
+    // MODIFIED updateSurveyProgress to primarily handle progress bar
+    // The original #check-results-btn (fixed at bottom) will now always be hidden.
     function updateSurveyProgress() {
       const answeredCount = Object.keys(state.surveyAnswers).length;
       const totalQuestions = state.surveyQuestions.length;
       if (totalQuestions === 0) { state.surveyProgress = 0; } 
       else { state.surveyProgress = (answeredCount / totalQuestions) * 100; }
+      
       const progressBar = document.getElementById('survey-progress');
       if (progressBar) progressBar.style.width = `${state.surveyProgress}%`;
-      const submitBtn = document.getElementById('check-results-btn');
-      if (submitBtn) {
-        submitBtn.style.display = (answeredCount === totalQuestions && totalQuestions > 0) ? 'block' : 'none';
+      
+      // The original fixed submit button is no longer used for display.
+      // It's handled by replacing the last question.
+      const originalSubmitBtn = document.getElementById('check-results-btn');
+      if (originalSubmitBtn) {
+        originalSubmitBtn.style.display = 'none'; 
       }
     }
+
     function formatQuestionText(text) {
       if (!text || text.length < 10) return text;
       const midpoint = Math.floor(text.length / 2);
@@ -300,17 +382,22 @@
       }
       return breakIndex !== -1 ? text.substring(0, breakIndex) + '<br>' + text.substring(breakIndex + 1) : text;
     }
+
+    // This original event listener for #check-results-btn might not be strictly needed
+    // if the new dynamic button handles its own click. However, keeping it doesn't hurt.
     const checkResultsBtn = document.getElementById('check-results-btn');
     if (checkResultsBtn) {
         checkResultsBtn.addEventListener('click', function(e) {
           e.preventDefault();
+          // This logic is now also in the dynamically created button's event listener
           const results = calculateResults(); 
           localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
           localStorage.setItem('surveyResults', JSON.stringify(results));
-          console.log("[SURVEY] Saved to localStorage (client-side): surveyResults =", JSON.stringify(results));
+          console.log("[SURVEY] Original fixed button (hidden): Saved to localStorage, surveyResults =", JSON.stringify(results));
           window.location.href = '/analyzing'; 
         });
     }
+
     function calculateResults() { 
       const questionsByCategory = {};
       state.surveyQuestions.forEach(question => {
@@ -365,7 +452,7 @@
         { id: 'q7', text: '북한과의 대화와 협력을 군사력 증강보다 우선해야 한다', category: 'security', progressiveValue: true },
         { id: 'q8', text: '강력한 한미동맹이 국가안보에 필수적이다', category: 'security', progressiveValue: false },
         { id: 'q9', text: '국방비 지출을 늘려 군사력을 강화해야 한다', category: 'security', progressiveValue: false },
-        { id: 'q10', text: '국제 평화 유지 및 인도적 지원에 더 적극적으로 참여해야 한다', category: 'security', progressiveValue: true },
+        { id: 'q10', text: '평화 유지 및 인도적 지원에 적극적으로 참여해야 한다', category: 'security', progressiveValue: true },
         { id: 'q11', text: '핵무장을 적극적으로 추진해야 한다', category: 'security', progressiveValue: false },
         { id: 'q12', text: '동성결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },
         { id: 'q13', text: '유교 사상은 우리 사회의 기본이다', category: 'social', progressiveValue: false },
@@ -376,16 +463,19 @@
         { id: 'q18', text: '원자력 발전은 확대되어야 한다', category: 'environment', progressiveValue: false },
         { id: 'q19', text: '육류 소비에 환경세를 부과해야 한다', category: 'environment', progressiveValue: true },
         { id: 'q20', text: '지구 환경 문제 해결보다 기술 개발을 우선시 해야 한다', category: 'environment', progressiveValue: false },
-        { id: 'q21', text: '친환경 정책이 일자리 감소를 유발하더라도 우선 추진해야 한다', category: 'environment', progressiveValue: true },
+        { id: 'q21', text: '친환경 정책이 일자리 감소를 유발하더라도 추진해야 한다', category: 'environment', progressiveValue: true },
         { id: 'q22', text: '중대 범죄에 대한 처벌을 강화해야 한다', category: 'law', progressiveValue: false },
         { id: 'q23', text: '사형제도는 폐지되어야 한다', category: 'law', progressiveValue: true },
         { id: 'q24', text: '국민의 알 권리 보장을 위해 정부 정보 공개를 확대해야 한다', category: 'law', progressiveValue: true },
         { id: 'q25', text: '범죄자의 교화와 재활을 위한 사회적 투자를 늘려야 한다', category: 'law', progressiveValue: true },
-        { id: 'q26', text: '개인의 사생활 보호보다 범죄 예방을 위한 감시를 확대해야 한다', category: 'law', progressiveValue: false }
+        { id: 'q26', text: '사생활 보호보다 범죄 예방을 위한 감시를 확대해야 한다', category: 'law', progressiveValue: false }
       ];
       if (typeof defaultQuestions !== 'undefined' && defaultQuestions.length > 0) {
         state.surveyQuestions = defaultQuestions;
-        if (questionsContainer) questionsContainer.innerHTML = ''; 
+        if (questionsContainer) {
+          questionsContainer.innerHTML = ''; 
+          questionsContainer.style.display = 'block'; 
+        }
         createQuestions(); updateSurveyProgress(); 
         console.log('[SURVEY] Initialized survey with defaultQuestions. Count:', state.surveyQuestions.length);
       } else {
@@ -519,7 +609,6 @@
       requestAnimationFrame(() => { messageLogEl.scrollTop = messageLogEl.scrollHeight; });
     }
 
-    // MODIFIED: Ensure input blurs after sending
     async function sendMessageToFloatingBot(message) {
       console.log('[CHATBOT] sendMessageToFloatingBot called.');
       displayRawTextMessage(message, 'user'); 
@@ -557,7 +646,6 @@
         });
     });
 
-    // MODIFIED: Ensure sendMessageToFloatingBot is called correctly, which now handles blur
     if (chatbotChatSendBtnEl && chatbotChatInputEl) {
         chatbotChatSendBtnEl.addEventListener('click', () => {
           console.log('[CHATBOT] Send button clicked.');
