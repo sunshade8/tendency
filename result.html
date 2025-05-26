@@ -124,7 +124,7 @@
     
     /* Result title styling */
     .result-title {
-      font-size: 30px;
+      font-size: 27px;
       font-weight: bold;
       margin-bottom: 0;
       text-align: center;
@@ -174,9 +174,11 @@
         <div class="logo-img"></div>
       </div>
       <div id="result-content" style="display:none">
-        <p class="result-title">당신은</p>
-        <p class="tendency-name" id="tendency-name">중도보수입니다!</p>
+        <p class="result-title" style="font-weight: medium; color: #C4C4C4;">당신은</p>
+        <p class="tendency-name" id="tendency-name" style="margin-bottom: 50px;">중도보수입니다!</p>
         <div class="result-character" id="result-character" style="margin-bottom: 50px;"></div>
+        
+        <div id="tendency-explanation" style="text-align: center; font-size: 21px; font-weight: bold; margin: 0 auto 50px; max-width: 90%; word-break: keep-all; word-wrap: break-word; line-height: 1.6; color: #DAD7D7;"></div>
         
         <div class="tendency-bar" style="margin-bottom: 10px;">
           <div class="tendency-category" style="margin-bottom: 20px;">
@@ -272,23 +274,28 @@
             <div class="right-label">보수</div>
           </div>
         </div>
+        <a href="#" id="restart-btn" class="share-btn" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 70px; margin-top: 30px;">
+          <img src="images/reset.png" alt="Reset" style="width: 20px; height: 20px;">
+          <span style="transform: translateY(1.5px);">다시하기</span>
+        </a>
+
+        <p class="share-text" style="font-size: 25px; margin-top: 70px; margin-bottom: 30px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
+        <a href="#" id="share-btn" class="share-btn">링크 공유하기</a>
         
-        <p class="share-text" style="font-size: 25px; margin-top: 50px; font-weight: bold;";">친구들이랑 같이 해보세요!</p>
-        <a href="#" id="share-btn" class="share-btn" style="margin-bottom: 70px;">링크 공유하기</a>
+       
         
-        <div style="width: 80vw; max-width: 500px; margin: 50px auto 0;">
-          <p class="share-text" style="font-size: 25px; font-weight: bold; text-align: left; margin: 0; padding-left: 5%;">편향적인 언론 말고<br>중립적인 뉴스를 보고 싶다면?</p>
+        <div style="width: 80vw; max-width: 500px; margin: 70px auto 0;">
+          <p class="share-text" style="font-size: 25px; font-weight: medium; text-align: center; margin: 0; padding: 0;"><span style="font-weight: bold;">편향적인</span> 언론 말고<br><span style="font-weight: bold;">중립적인</span> 뉴스를 보고 싶다면?</p>
         </div>
-        
         
         <div class="media-info" style="display: flex; align-items: center; justify-content: center; margin-top: 50px; margin-bottom: 10px;">
-          <div class="ai-news" style="font-size: 25px; font-weight: bold; margin-right: 10px;">AI 중립뉴스</div>
+          <div class="ai-news" style="font-size: 22px; font-weight: bold; margin-right: 10px;">AI 중립뉴스</div>
           <img src="images/logo.png" alt="Logo" class="media-logo" style="height: 20px; margin-bottom: 6px;">
-          <div class="median" style="font-size: 25px; font-weight: bold; margin-left: 10px;">미디안</div>
+          <div class="median" style="font-size: 22px; font-weight: bold; margin-left: 10px;">미디안</div>
         </div>
-        <div class="instagram-follow" style="font-size: 20px; font-weight: medium; margin-top: 10px; text-align: center;">인스타그램 팔로우!</div>
+        <div class="instagram-follow" style="font-size: 18px; font-weight: medium; margin-top: 10px; text-align: center;">인스타그램 팔로우!</div>
         
-        <a href="https://www.instagram.com/median.ai/" target="_blank" class="share-btn" style="margin-bottom: 50px;">팔로우</a>
+        <a href="https://www.instagram.com/median.ai/" target="_blank" class="share-btn" style="margin-top: 30px; margin-bottom: 50px;">팔로우</a>
       </div>
       
       <div id="no-results-message" style="text-align: center; display: none; margin-top: 50px;">
@@ -348,6 +355,18 @@
         document.getElementById('share-btn').addEventListener('click', function(e) {
           e.preventDefault();
           shareResults(results.tendencyType);
+        });
+        
+        // Setup restart button
+        document.getElementById('restart-btn').addEventListener('click', function(e) {
+          e.preventDefault();
+          if (confirm('테스트를 다시 시작하시겠습니까? 현재 결과는 삭제됩니다.')) {
+            // Clear localStorage
+            localStorage.removeItem('surveyAnswers');
+            localStorage.removeItem('surveyResults');
+            // Redirect to home page
+            window.location.href = '/';
+          }
         });
       } catch (err) {
         console.error("Error processing results:", err);
@@ -413,38 +432,52 @@
     
     function updateCharacterImage(tendencyType) {
       const characterImage = document.getElementById('result-character');
+      const explanationElement = document.getElementById('tendency-explanation');
       let characterImagePath = '';
       let pointColor = '#FF00A1'; // Default color
+      let explanation = '';
       
       switch(tendencyType) {
         case '태극기':
           characterImagePath = 'images/character-korea.png';
           pointColor = '#FF0000'; // Korean flag red
+          explanation = '애국심과 국가 정체성을 강조합니다. 전통적 가치관과 강력한 국방력, 보수적 사회 질서를 중시합니다.';
           break;
         case '보수':
           characterImagePath = 'images/character-conservative.png';
           pointColor = '#FF0051';
+          explanation = '전통적 가치와 기존 질서 유지를 중요시합니다. 시장 경제와 개인의 자유, 국가 안보 강화를 지지합니다.';
           break;
         case '중도보수':
           characterImagePath = 'images/character-moderate-conservative.png';
           pointColor = '#FF00A1';
+          explanation = '전통과 안정을 중시하면서도 합리적 변화에 열린 태도를 가집니다. 경제 성장과 안보를 우선시하는 경향이 있습니다.';
           break;
         case '중도':
           characterImagePath = 'images/character-moderate.png';
           pointColor = '#BDBDBD';
+          explanation = '이념보다는 실용성과 합리성을 중시합니다. 극단을 피하고 사회적 합의와 점진적 발전을 추구합니다.';
           break;
         case '중도진보':
           characterImagePath = 'images/character-moderate-progressive.png';
           pointColor = '#00D0FF';
+          explanation = '기본적으로 진보적 가치에 공감하지만 실용주의적 접근을 선호합니다. 경제 성장과 사회 안전망의 균형을 추구합니다.';
           break;
         case '진보':
           characterImagePath = 'images/character-progressive.png';
           pointColor = '#007BFF';
+          explanation = '사회적 약자 보호와 평등을 중시합니다. 환경, 인권, 다양성 존중의 가치를 우선시하는 경향이 있습니다.';
           break;
         case '공산당원':
           characterImagePath = 'images/character-communist.png';
           pointColor = '#CC0000'; // Communist red
+          explanation = '경제적 평등과 사회 개혁에 강한 신념을 가지고 있습니다. 국가의 적극적 개입을 통한 재분배와 구조적 변화를 지지합니다.';
           break;
+      }
+      
+      // Set the explanation text with quotation marks
+      if (explanationElement && explanation) {
+        explanationElement.textContent = `"${explanation}"`;
       }
       
       if (characterImagePath && characterImage) {
