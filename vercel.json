@@ -6,9 +6,11 @@
     { "src": "*.js", "use": "@vercel/static" },
     { "src": "images/*", "use": "@vercel/static" },
     { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "api/chatbot.py", "use": "@vercel/python" },
     { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
+    { "src": "/api/chatbot", "dest": "/api/chatbot.py" },
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/", "dest": "/index.html" },
     { "src": "/questions", "dest": "/questions.html" },

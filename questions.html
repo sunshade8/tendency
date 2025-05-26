@@ -2,11 +2,225 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>정치 성향 테스트 - 설문</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <style>
+    /* ========================================================================== */
+    /* === 이 <style> 블록은 오직 플로팅 챗봇 UI만을 위한 CSS입니다. === */
+    /* === 페이지 전체 배경이 검은색이라고 가정하고, 챗봇 UI는 배경/테두리 없이 글씨만 보이도록 합니다. === */
+    /* ========================================================================== */
+
+    body {
+      background-color: #000000 !important; 
+      color: #FFFFFF !important; 
+      padding-bottom: 280px; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      overflow-x: hidden;
+      position: relative; 
+      min-height: 100%; 
+    }
+
+    #app { 
+        /* Styles for #app if any specific ones were intended */
+    }
+
+    .survey-page {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding-bottom: 320px !important; 
+        
+        /* === CRITICAL: This line MUST remain commented out or removed === */
+        /* height: calc(100vh - 50px); */ 
+        
+        -webkit-overflow-scrolling: touch;
+    }
+
+  #questions-container {
+    position: relative;
+    width: 100%;
+    padding-top: 70px; /* Questions shifted up */
+  }
+
+  .question-container {
+    position: relative !important; 
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin-bottom: 40px; /* 각 질문 컨테이너 사이의 하단 여백 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box; /* padding을 포함하여 width/height 계산 */
+  }
+
+  /* 원래 .submit-btn 스타일. 이 버튼은 이제 직접 보이지 않게 됩니다. */
+  .submit-btn {
+    bottom: 300px !important; 
+  }
+
+
+  .progress-bar-bottom {
+    z-index: 500; 
+  }
+
+
+  @media screen and (max-width: 392px) {
+    .survey-page {
+      padding-bottom: 320px !important; 
+    }
+    .submit-btn { 
+      bottom: 280px !important;
+    }
+    #questions-container {
+      padding-top: 50px; 
+    }
+  }
+
+  @media screen and (max-height: 700px) {
+    .survey-page {
+      padding-bottom: 260px !important; 
+    }
+    .submit-btn { 
+      bottom: 240px !important;
+    }
+    #character-ferris-wheel {
+      height: 90px;
+    }
+    #chatbot-message-log {
+      max-height: 80px;
+    }
+  }
+
+.ferris-char-img,
+.opinion-option,
+#persistent-send-btn {
+  touch-action: manipulation;
+}
+
+    #floating-chatbot-ui {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 330px; 
+      z-index: 1000;
+      display: flex; flex-direction: column; align-items: center; 
+      background-color: transparent; 
+      border: none;
+      box-shadow: none;
+      padding: 0; 
+    }
+
+    #character-ferris-wheel {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        width: 100%;
+        margin-bottom: 10px; 
+        height: 110px; 
+        position: relative;
+    }
+    .ferris-char-img {
+        height: 70px; 
+        width: auto;
+        max-width: 60px;
+        object-fit: contain;
+        cursor: pointer;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        opacity: 0.4; 
+        margin: 0 2px; 
+        filter: drop-shadow(0 1px 2px rgba(255,255,255,0.1)); 
+    }
+    .ferris-char-img.active {
+        height: 100px; 
+        max-width: 80px;
+        opacity: 1;
+        z-index: 10; 
+    }
+
+    #chatbot-message-log { 
+      width: calc(100% - 20px); 
+      max-height: 100px; 
+      overflow-y: auto; 
+      padding: 0; 
+      margin-bottom: 10px; 
+      background-color: transparent; 
+      border-radius: 0; 
+      box-shadow: none; 
+      display: flex; flex-direction: column; gap: 4px; 
+      scrollbar-width: none; -ms-overflow-style: none;  
+    }
+    #chatbot-message-log::-webkit-scrollbar { display: none; }
+
+    .chat-text-line { 
+        font-size: 0.9em; line-height: 1.4; 
+        padding: 1px 0; 
+        word-break: break-all;
+        text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 6px rgba(0,0,0,0.5); 
+    }
+    .bot-text { color: #FFFFFF; text-align: left; }
+    .bot-text strong { font-weight: 600; color: #F0F0F0; }
+    .user-text { color: #F0F0F0; text-align: right; }
+    
+    #floating-input-area { 
+      display: flex;
+      width: 100%;
+      background-color: rgba(25, 25, 25, 0.88); 
+      padding: 8px; 
+      border-radius: 20px; 
+      border: 1px solid rgba(255,255,255,0.08); 
+    }
+    #persistent-chat-input { 
+      flex-grow: 1;
+      padding: 8px 12px; 
+      border: none; 
+      border-radius: 16px; 
+      font-size: 16px;
+      background-color: rgba(10, 10, 10, 0.9); 
+      color: #FFFFFF; 
+      outline: none;
+      margin-right: 8px;
+    }
+    #persistent-chat-input::placeholder { color: #BBBBBB; } 
+    #persistent-send-btn {
+      width: 34px; height: 34px; 
+      background-color: rgba(255, 255, 255, 0.15); 
+      color: #FFFFFF;
+      border: none; border-radius: 50%; 
+      cursor: pointer; display: flex; justify-content: center; align-items: center;
+      font-size: 16px; transition: background-color 0.2s;
+    }
+    #persistent-send-btn:hover { background-color: rgba(255, 255, 255, 0.3); } 
+
+    /* 마지막 질문 자리에 표시될 버튼 스타일 */
+    .final-results-btn-in-place {
+        display: block; 
+        width: 80%; 
+        max-width: 350px; 
+        margin: 0 auto; /* 상하 마진은 부모의 padding으로 조절, 좌우 auto로 중앙 정렬 */
+        padding: 15px 20px;
+        background-color: #6c757d; /* 회색 계열 */
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 50px; 
+        font-size: 1.1em;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    .final-results-btn-in-place:hover {
+        background-color: #5a6268; 
+        transform: translateY(-2px);
+    }
+    .final-results-btn-in-place:active {
+        background-color: #545b62; 
+        transform: translateY(0px);
+    }
+    
+  </style>
 </head>
 <body>
   <div id="app">
@@ -15,34 +229,45 @@
         <div class="logo-img"></div>
       </div>
       <div id="questions-container">
-        <!-- Questions will be dynamically loaded here -->
-      </div>
+        </div>
       <a href="#" id="check-results-btn" class="submit-btn" style="display: none;">결과 확인하기</a>
+      
       <div class="progress-bar-bottom">
         <div class="progress-indicator" id="survey-progress"></div>
       </div>
     </div>
   </div>
+  <div id="floating-chatbot-ui">
+    <div id="character-ferris-wheel">
+      <img class="ferris-char-img" data-char-id="lee_jae_myung" src="images/leejaemyung.png" alt="이재명">
+      <img class="ferris-char-img" data-char-id="kim_moon_soo" src="images/kimmoonsoo.png" alt="김문수">
+      <img class="ferris-char-img" data-char-id="lee_jun_seok" src="images/leejunseok.png" alt="이준석">
+    </div>
+    <div id="chatbot-message-log">
+      </div>
+    <div id="floating-input-area">
+      <input type="text" id="persistent-chat-input" placeholder="질문하세요...">
+      <button id="persistent-send-btn">➤</button>
+    </div>
+  </div>
   
   <script>
-    // State variables
+    // --- ★★★ 원본 설문 JavaScript 로직 시작 ★★★ ---
     const state = {
       surveyQuestions: [],
       surveyAnswers: {},
       surveyProgress: 0
     };
     
-    // Create questions
     function createQuestions() {
       const questionsContainer = document.getElementById('questions-container');
-      questionsContainer.innerHTML = ''; // Clear any existing questions
-      
+      if (!questionsContainer) { console.error("Original Survey: Questions container not found!"); return; }
+      questionsContainer.innerHTML = ''; 
       state.surveyQuestions.forEach((question, index) => {
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question-container';
         questionDiv.id = question.id;
-        questionDiv.style.display = index === 0 ? 'flex' : 'none';
-        
+        questionDiv.style.display = index === 0 ? 'flex' : 'none'; 
         questionDiv.innerHTML = `
           <p class="question-text">${formatQuestionText(question.text)}</p>
           <div class="opinion-scale">
@@ -57,122 +282,116 @@
             <span class="right-label">매우 동의</span>
           </div>
         `;
-        
         questionsContainer.appendChild(questionDiv);
       });
     }
-    
-    // Select option
+
     function selectOption(element, value, questionId) {
-      // Remove selection from other options in the same question
       document.querySelectorAll(`.opinion-option[data-question="${questionId}"]`).forEach(opt => {
         opt.classList.remove('selected');
       });
-      
-      // Add selection to clicked option
       element.classList.add('selected');
-      
-      // Save answer
       state.surveyAnswers[questionId] = value;
       
-      // Update progress
-      updateSurveyProgress();
-      
-      // Move to next question with a slight delay for animation
       const currentIndex = state.surveyQuestions.findIndex(q => q.id === questionId);
-      if (currentIndex < state.surveyQuestions.length - 1) {
+      const isLastQuestion = currentIndex === state.surveyQuestions.length - 1;
+
+      updateSurveyProgress(); 
+
+      if (isLastQuestion) {
+        console.log('[SURVEY] Last question answered. Replacing with button.');
+        const currentQuestionEl = document.getElementById(questionId);
+        if (currentQuestionEl) {
+          currentQuestionEl.innerHTML = ''; 
+          currentQuestionEl.style.display = 'block'; 
+          // MODIFIED: Increased top/bottom padding to lower the button and give it space
+          // 이전 값: '20px 0' 또는 '20px 0'
+          // 새 값: '50px 15px 30px 15px' (상, 우, 하, 좌) - 버튼 위의 공간을 50px로 늘림
+          currentQuestionEl.style.padding = '50px 15px 30px 15px'; 
+
+          const resultsButtonInPlace = document.createElement('a');
+          resultsButtonInPlace.href = "#"; 
+          resultsButtonInPlace.id = 'dynamic-check-results-btn'; 
+          resultsButtonInPlace.className = 'final-results-btn-in-place'; 
+          resultsButtonInPlace.textContent = '결과 확인하기';
+          
+          resultsButtonInPlace.addEventListener('click', function(e) {
+            e.preventDefault();
+            const results = calculateResults(); 
+            localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
+            localStorage.setItem('surveyResults', JSON.stringify(results));
+            console.log("[SURVEY] In-place button: Saved to localStorage, surveyResults =", JSON.stringify(results));
+            window.location.href = '/analyzing'; 
+          });
+          currentQuestionEl.appendChild(resultsButtonInPlace);
+          
+          setTimeout(() => {
+            resultsButtonInPlace.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 100);
+        }
+      } else {
         setTimeout(() => {
-          document.getElementById(questionId).style.display = 'none';
-          document.getElementById(state.surveyQuestions[currentIndex + 1].id).style.display = 'flex';
+          const currentQuestionEl = document.getElementById(questionId);
+          const nextQuestionEl = document.getElementById(state.surveyQuestions[currentIndex + 1].id);
+          if (currentQuestionEl) currentQuestionEl.style.display = 'none';
+          if (nextQuestionEl) {
+            nextQuestionEl.style.display = 'flex'; 
+            nextQuestionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
         }, 300);
       }
     }
-    
-    // Update survey progress
+
     function updateSurveyProgress() {
       const answeredCount = Object.keys(state.surveyAnswers).length;
       const totalQuestions = state.surveyQuestions.length;
-      state.surveyProgress = (answeredCount / totalQuestions) * 100;
+      if (totalQuestions === 0) { state.surveyProgress = 0; } 
+      else { state.surveyProgress = (answeredCount / totalQuestions) * 100; }
       
       const progressBar = document.getElementById('survey-progress');
-      if (progressBar) {
-        progressBar.style.width = `${state.surveyProgress}%`;
-      }
+      if (progressBar) progressBar.style.width = `${state.surveyProgress}%`;
       
-      // Show or hide submit button based on progress
-      const submitBtn = document.getElementById('check-results-btn');
-      if (submitBtn) {
-        submitBtn.style.display = answeredCount === totalQuestions ? 'block' : 'none';
+      const originalSubmitBtn = document.getElementById('check-results-btn');
+      if (originalSubmitBtn) {
+        originalSubmitBtn.style.display = 'none'; 
       }
     }
-    
-    // Format question text for better line breaks
+
     function formatQuestionText(text) {
       if (!text || text.length < 10) return text;
-      
-      // For longer text, try to find a good breaking point
       const midpoint = Math.floor(text.length / 2);
-      
-      // Try to find a space near the midpoint
       let breakIndex = -1;
-      for (let i = 0; i < 10; i++) {
-        // Check increasingly farther from the midpoint
-        const checkIndex = text.indexOf(' ', midpoint - i);
-        if (checkIndex !== -1 && checkIndex <= midpoint + i) {
-          breakIndex = checkIndex;
-          break;
-        }
+      for (let i = 0; i < 10; i++) { 
+        const checkIndexFwd = text.indexOf(' ', midpoint + i);
+        const checkIndexBwd = text.lastIndexOf(' ', midpoint - i);
+        if (checkIndexBwd !== -1 && checkIndexBwd > 0) { breakIndex = checkIndexBwd; break; }
+        if (checkIndexFwd !== -1 && checkIndexFwd < text.length -1 ) { breakIndex = checkIndexFwd; break; }
       }
-      
-      if (breakIndex !== -1) {
-        return text.substring(0, breakIndex) + '<br>' + text.substring(breakIndex + 1);
-      }
-      
-      return text;
+      return breakIndex !== -1 ? text.substring(0, breakIndex) + '<br>' + text.substring(breakIndex + 1) : text;
     }
-    
-    // Store results in local storage and redirect to analyzing page
-    document.getElementById('check-results-btn').addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      // Calculate category results
-      const results = calculateResults();
-      
-      // Store results in local storage
-      localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
-      localStorage.setItem('surveyResults', JSON.stringify(results));
-      
-      console.log("Saved to localStorage: surveyResults =", JSON.stringify(results)); // Debug log
-      
-      // Redirect to analyzing page
-      window.location.href = '/analyzing';
-    });
-    
-    // Calculate results
-    function calculateResults() {
-      // Group questions by category
+
+    const checkResultsBtn = document.getElementById('check-results-btn');
+    if (checkResultsBtn) {
+        checkResultsBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const results = calculateResults(); 
+          localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
+          localStorage.setItem('surveyResults', JSON.stringify(results));
+          console.log("[SURVEY] Original fixed button (hidden): Saved to localStorage, surveyResults =", JSON.stringify(results));
+          window.location.href = '/analyzing'; 
+        });
+    }
+
+    function calculateResults() { 
       const questionsByCategory = {};
       state.surveyQuestions.forEach(question => {
-        if (!questionsByCategory[question.category]) {
-          questionsByCategory[question.category] = [];
-        }
+        if (!questionsByCategory[question.category]) { questionsByCategory[question.category] = []; }
         questionsByCategory[question.category].push(question);
       });
-      
-      // Results object
-      const results = {
-        economic: 0,
-        security: 0,
-        social: 0,
-        environment: 0,
-        law: 0
-      };
-      
-      // Calculate scores for each category
+      const results = { economic: 0, security: 0, social: 0, environment: 0, law: 0 };
       Object.keys(questionsByCategory).forEach(category => {
         const questions = questionsByCategory[category];
         let totalScore = 0;
-        
         questions.forEach(question => {
           const answer = state.surveyAnswers[question.id] || 3; // Default to middle if not answered
           
@@ -186,247 +405,279 @@
             // For conservative questions, agreeing (high values) means more conservative (high result)
             score = ((answer - 1) / 4) * 100;
           }
-          
+
           totalScore += score;
         });
-        
-        // Average score for the category
-        results[category] = Math.round(totalScore / questions.length);
+        if (questions.length > 0) { results[category] = Math.round(totalScore / questions.length); } 
+        else { results[category] = 50; }
       });
-      
-      // Calculate tendency type
-      const overallScore = Object.values(results).reduce((sum, score) => sum + score, 0) / Object.keys(results).length;
-      
+      const categoryScores = Object.values(results).filter(score => typeof score === 'number');
+      const overallScore = categoryScores.length > 0 ? categoryScores.reduce((sum, score) => sum + score, 0) / categoryScores.length : 50;
       let tendencyType;
-      if (overallScore >= 95) {
-        tendencyType = '태극기';
-      } else if (overallScore >= 75) {
-        tendencyType = '보수';
-      } else if (overallScore >= 55) {
-        tendencyType = '중도보수';
-      } else if (overallScore >= 45) {
-        tendencyType = '중도';
-      } else if (overallScore >= 25) {
-        tendencyType = '중도진보';
-      } else if (overallScore >= 5) {
-        tendencyType = '진보';
-      } else {
-        tendencyType = '공산당원';
-      }
-      
+      if (overallScore >= 95) tendencyType = '태극기';
+      else if (overallScore >= 75) tendencyType = '보수';
+      else if (overallScore >= 55) tendencyType = '중도보수';
+      else if (overallScore >= 45) tendencyType = '중도';
+      else if (overallScore >= 25) tendencyType = '중도진보';
+      else if (overallScore >= 5) tendencyType = '진보';
+      else tendencyType = '공산당원';
       results.tendencyType = tendencyType;
-      
-      console.log("Calculated results:", JSON.stringify(results)); // Debug log
-
+      console.log("[SURVEY] Calculated results (client-side):", JSON.stringify(results));
       return results;
     }
-    
-    // Logo click event
-    document.querySelector('.logo').addEventListener('click', function() {
-      // Ask for confirmation if answers exist
-      if (Object.keys(state.surveyAnswers).length > 0) {
-        if (confirm('테스트를 처음부터 다시 시작하시겠습니까? 현재 진행 상황은 저장되지 않습니다.')) {
-          window.location.href = '/';
-        }
-      } else {
-        window.location.href = '/';
-      }
-    });
-    
-    // Fetch questions from API and initialize
+    const logoEl = document.querySelector('.logo');
+    if (logoEl) {
+        logoEl.addEventListener('click', function() {
+          if (Object.keys(state.surveyAnswers).length > 0) {
+            if (confirm('테스트를 처음부터 다시 시작하시겠습니까? 현재 진행 상황은 저장되지 않습니다.')) { window.location.href = '/'; }
+          } else { window.location.href = '/'; }
+        });
+    }
     function fetchQuestions() {
       const questionsContainer = document.getElementById('questions-container');
-      
       const defaultQuestions = [
-    {
-      id: 'q1',
-      text: '부자들에게 지금보다 더 높은 세율을 적용해야 한다',
-      category: 'economic',
-      progressiveValue: true
-    },
-    {
-      id: 'q2',
-      text: '복지 지출 확대보다 국가 부채 감축을 우선해야 한다',
-      category: 'economic',
-      progressiveValue: false
-    },
-    {
-      id: 'q3',
-      text: '기본소득을 도입해야 한다',
-      category: 'economic',
-      progressiveValue: true
-    },
-    {
-      id: 'q4',
-      text: '공기업 민영화를 확대해야 한다',
-      category: 'economic',
-      progressiveValue: false
-    },
-    {
-      id: 'q5',
-      text: '최저임금을 지금보다 더 인상해야 한다',
-      category: 'economic',
-      progressiveValue: true
-    },
-    {
-      id: 'q6',
-      text: '주 4일 근무제를 법적으로 도입해야 한다',
-      category: 'economic',
-      progressiveValue: true
-    },
-    {
-      id: 'q7',
-      text: '북한과의 대화와 협력을 군사력 증강보다 우선해야 한다',
-      category: 'security',
-      progressiveValue: true
-    },
-    {
-      id: 'q8',
-      text: '강력한 한미동맹이 국가안보에 필수적이다',
-      category: 'security',
-      progressiveValue: false
-    },
-    {
-      id: 'q9',
-      text: '국방비 지출을 늘려 군사력을 강화해야 한다',
-      category: 'security',
-      progressiveValue: false
-    },
-    {
-      id: 'q10',
-      text: '국제 평화 유지 활동 및 인도적 지원에 더 적극적으로 참여해야 한다',
-      category: 'security',
-      progressiveValue: true
-    },
-    {
-      id: 'q11',
-      text: '핵무장을 적극적으로 추진해야 한다',
-      category: 'security',
-      progressiveValue: false
-    },
-    {
-      id: 'q12',
-      text: '동성결혼을 법적으로 인정해야 한다',
-      category: 'social',
-      progressiveValue: true
-    },
-    {
-      id: 'q13',
-      text: '유교 사상은 우리 사회의 기본이다',
-      category: 'social',
-      progressiveValue: false
-    },
-    {
-      id: 'q14',
-      text: '성별 임금 격차 해소를 위한 법적 조치를 강화해야 한다',
-      category: 'social',
-      progressiveValue: true
-    },
-    {
-      id: 'q15',
-      text: '전쟁 난민을 적극적으로 받아들여야 한다',
-      category: 'social',
-      progressiveValue: true
-    },
-    {
-    id: 'q16',
-    text: '인공지능과의 결혼을 법적으로 인정해야 한다',
-    category: 'social',
-    progressiveValue: true
-    },  
-    {
-      id: 'q17',
-      text: '경제성장보다 환경보호가 우선되어야 한다',
-      category: 'environment',
-      progressiveValue: true
-    },
-    {
-      id: 'q18',
-      text: '원자력 발전은 확대되어야 한다',
-      category: 'environment',
-      progressiveValue: false
-    },
-    {
-    id: 'q19',
-    text: '육류 소비에 환경세를 부과해야 한다',
-    category: 'environment',
-    progressiveValue: true
-    },
-    {
-      id: 'q20',
-      text: '지구 환경 문제 해결보다 과학 기술 개발에 더 많은 투자를 해야 한다',
-      category: 'environment',
-      progressiveValue: false
-    },
-    {
-      id: 'q21',
-      text: '친환경 정책이 일자리 감소를 유발하더라도 우선 추진해야 한다',
-      category: 'environment',
-      progressiveValue: true
-    },
-    {
-      id: 'q22',
-      text: '중대 범죄에 대한 처벌을 강화해야 한다',
-      category: 'law',
-      progressiveValue: false
-    },
-    {
-      id: 'q23',
-      text: '사형제도는 폐지되어야 한다',
-      category: 'law',
-      progressiveValue: true
-    },
-    {
-      id: 'q24',
-      text: '국민의 알 권리 보장을 위해 정부 정보 공개를 확대해야 한다',
-      category: 'law',
-      progressiveValue: true
-    },
-    {
-      id: 'q25',
-      text: '범죄자의 교화와 재활을 위한 사회적 투자를 늘려야 한다',
-      category: 'law',
-      progressiveValue: true
-    },
-    {
-      id: 'q26',
-      text: '개인의 사생활 보호보다 범죄 예방을 위한 CCTV 설치 등 감시를 확대해야 한다',
-      category: 'law',
-      progressiveValue: false
-    }
-
-
+        { id: 'q1', text: '부자들에게 지금보다 더 높은 세율을 적용해야 한다', category: 'economic', progressiveValue: true },
+        { id: 'q2', text: '복지 지출 확대보다 국가 부채 감축을 우선해야 한다', category: 'economic', progressiveValue: false },
+        { id: 'q3', text: '기본소득을 도입해야 한다', category: 'economic', progressiveValue: true },
+        { id: 'q4', text: '공기업 민영화를 확대해야 한다', category: 'economic', progressiveValue: false },
+        { id: 'q5', text: '최저임금을 지금보다 더 인상해야 한다', category: 'economic', progressiveValue: true },
+        { id: 'q6', text: '주 4일 근무제를 법적으로 도입해야 한다', category: 'economic', progressiveValue: true },
+        { id: 'q7', text: '북한과의 대화와 협력을 군사력 증강보다 우선해야 한다', category: 'security', progressiveValue: true },
+        { id: 'q8', text: '강력한 한미동맹이 국가안보에 필수적이다', category: 'security', progressiveValue: false },
+        { id: 'q9', text: '국방비 지출을 늘려 군사력을 강화해야 한다', category: 'security', progressiveValue: false },
+        { id: 'q10', text: '평화유지 및 인도적 지원에 적극적으로 참여해야 한다', category: 'security', progressiveValue: true },
+        { id: 'q11', text: '핵무장을 적극적으로 추진해야 한다', category: 'security', progressiveValue: false },
+        { id: 'q12', text: '동성결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },
+        { id: 'q13', text: '유교 사상은 우리 사회의 기본이다', category: 'social', progressiveValue: false },
+        { id: 'q14', text: '성별 임금 격차 해소를 위한 법적 조치를 강화해야 한다', category: 'social', progressiveValue: true },
+        { id: 'q15', text: '전쟁 난민을 적극적으로 받아들여야 한다', category: 'social', progressiveValue: true },
+        { id: 'q16', text: '인공지능과의 결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },  
+        { id: 'q17', text: '경제성장보다 환경보호가 우선되어야 한다', category: 'environment', progressiveValue: true },
+        { id: 'q18', text: '원자력 발전은 확대되어야 한다', category: 'environment', progressiveValue: false },
+        { id: 'q19', text: '육류 소비에 환경세를 부과해야 한다', category: 'environment', progressiveValue: true },
+        { id: 'q20', text: '지구 환경 문제 해결보다 기술 개발을 우선시 해야 한다', category: 'environment', progressiveValue: false },
+        { id: 'q21', text: '친환경 정책이 일자리 감소를 유발하더라도 추진해야 한다', category: 'environment', progressiveValue: true },
+        { id: 'q22', text: '중대 범죄에 대한 처벌을 강화해야 한다', category: 'law', progressiveValue: false },
+        { id: 'q23', text: '사형제도는 폐지되어야 한다', category: 'law', progressiveValue: true },
+        { id: 'q24', text: '국민의 알 권리 보장을 위해 정부 정보 공개를 확대해야 한다', category: 'law', progressiveValue: true },
+        { id: 'q25', text: '범죄자의 교화와 재활을 위한 사회적 투자를 늘려야 한다', category: 'law', progressiveValue: true },
+        { id: 'q26', text: '사생활 보호보다 범죄 예방을 위한 감시를 확대해야 한다', category: 'law', progressiveValue: false }
       ];
-      
       if (typeof defaultQuestions !== 'undefined' && defaultQuestions.length > 0) {
         state.surveyQuestions = defaultQuestions;
-        // Clear loading message
         if (questionsContainer) {
           questionsContainer.innerHTML = ''; 
+          questionsContainer.style.display = 'block'; 
         }
-        createQuestions(); 
-        updateSurveyProgress(); // Initialize progress bar
-        console.log('Initialized survey with embedded defaultQuestions. Count:', state.surveyQuestions.length);
+        createQuestions(); updateSurveyProgress(); 
+        console.log('[SURVEY] Initialized survey with defaultQuestions. Count:', state.surveyQuestions.length);
       } else {
-        console.error('defaultQuestions array is not defined or is empty. Cannot initialize survey.');
+        console.error('[SURVEY] defaultQuestions array is not defined or is empty.');
         if (questionsContainer) {
-          questionsContainer.innerHTML = '<div style="text-align: center; margin-top: 50px; color: red;">Error: Question data is missing.</div>';
+          questionsContainer.innerHTML = '<div style="text-align: center; margin-top: 50px; color: red;">질문 데이터를 불러오는데 실패했습니다.</div>';
         }
       }
     }
+    // --- ★★★ 원본 설문 JavaScript 로직 끝 ★★★ ---
+
+    // --- 플로팅 챗봇 JavaScript 로직 시작 ---
+    const messageLogEl = document.getElementById('chatbot-message-log'); 
+    const chatbotChatInputEl = document.getElementById('persistent-chat-input'); 
+    const chatbotChatSendBtnEl = document.getElementById('persistent-send-btn');
+    const floatingChatbotUI = document.getElementById('floating-chatbot-ui');
+    const surveyPage = document.querySelector('.survey-page.active');
+    const appElement = document.getElementById('app');
     
-    // Initialize
+    const ferrisWheelEl = document.getElementById('character-ferris-wheel');
+    const ferrisCharImages = Array.from(ferrisWheelEl.querySelectorAll('.ferris-char-img')); 
+
+    const characters = {
+      "lee_jae_myung": { name: "이재명", image: "images/leejaemyung.png", greeting: "안녕하세요. 이재명입니다." },
+      "kim_moon_soo": { name: "김문수", image: "images/kimmoonsoo.png", greeting: "반갑습니다. 김문수입니다." }, 
+      "lee_jun_seok": { name: "이준석", image: "images/leejunseok.png", greeting: "안녕하십니까. 이준석입니다." }  
+    };
+    const characterOrder = ferrisCharImages.map(img => img.dataset.charId);
+    let currentCharacterIndex = 0; 
+    let currentCharacterId = characterOrder[currentCharacterIndex];
+
+    // --- ADVANCED KEYBOARD HANDLING & SCROLL RESTORATION ---
+    if (chatbotChatInputEl && surveyPage && floatingChatbotUI && appElement) {
+        let surveyPageScrollTopBeforeKeyboard = 0;
+
+        chatbotChatInputEl.addEventListener('focus', () => {
+            console.log('[CHATBOT] Input focused.');
+            document.body.classList.add('keyboard-is-active'); 
+            surveyPageScrollTopBeforeKeyboard = surveyPage.scrollTop;
+            console.log(`[CHATBOT] surveyPage.scrollTop before focus: ${surveyPageScrollTopBeforeKeyboard}`);
+        });
+
+        chatbotChatInputEl.addEventListener('blur', () => {
+            console.log('[CHATBOT] Input blurred.');
+            document.body.classList.remove('keyboard-is-active');
+
+            setTimeout(() => {
+                console.log('[CHATBOT] Blur timeout: Attempting to restore view.');
+
+                document.body.style.overflow = ''; 
+                if (appElement) {
+                     appElement.style.overflow = ''; 
+                }
+                surveyPage.style.overflowY = 'auto'; 
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                console.log('[CHATBOT] Window scrolled to top.');
+
+                requestAnimationFrame(() => {
+                    surveyPage.scrollTo({ top: 0, behavior: 'smooth' });
+                    console.log('[CHATBOT] surveyPage scrolled to top.');
+                    
+                    console.log(`[CHATBOT] After scroll attempts: window.scrollY=${window.scrollY}, surveyPage.scrollTop=${surveyPage.scrollTop}`);
+                    if(surveyPage) {
+                        console.log(`[CHATBOT] surveyPage offsetHeight: ${surveyPage.offsetHeight}, scrollHeight: ${surveyPage.scrollHeight}`);
+                    }
+                });
+
+            }, 350); 
+        });
+    }
+    // --- END OF KEYBOARD HANDLING ---
+
+    function updateFerrisWheelDisplay() {
+        ferrisCharImages.forEach((img, index) => {
+            img.classList.remove('active');
+            if (index === currentCharacterIndex) {
+                img.classList.add('active');
+                img.style.transform = 'scale(1.25)'; 
+                img.style.opacity = '1';
+            } else {
+                const offset = index - currentCharacterIndex;
+                const distance = Math.abs(offset);
+                const scale = 1 - (distance * 0.25); 
+                const opacity = 0.8 - (distance * 0.3);
+                const zIndex = characterOrder.length - distance;
+                let translateX = 0;
+                if (offset === -1 || (offset === characterOrder.length - 1 && currentCharacterIndex === 0) ) { 
+                    translateX = -50; 
+                } else if (offset === 1 || (offset === -(characterOrder.length - 1) && currentCharacterIndex === characterOrder.length-1) ) { 
+                    translateX = 50; 
+                } else { 
+                    translateX = offset > 0 ? 100 : -100;
+                    img.style.opacity = '0'; 
+                }
+                img.style.transform = `translateX(${translateX}px) scale(${Math.max(0.6, scale)})`;
+                img.style.opacity = `${Math.max(0, opacity)}`;
+                img.style.zIndex = `${zIndex}`;
+            }
+        });
+    }
+
+    function updateChatbotUIForCharacter(charIdx) {
+      currentCharacterIndex = charIdx;
+      currentCharacterId = characterOrder[charIdx]; 
+      const charData = characters[currentCharacterId];
+      if (!charData) { console.error(`[CHATBOT] Character data for ${currentCharacterId} not found.`); return; }
+      updateFerrisWheelDisplay();
+      if (chatbotChatInputEl) chatbotChatInputEl.placeholder = `가상의 봇일 뿐 실제와 다릅니다`;
+      if (messageLogEl) messageLogEl.innerHTML = ''; 
+      displayRawTextMessage(charData.greeting, 'bot'); 
+    }
+
+    function displayRawTextMessage(message, sender) { 
+      if (!messageLogEl) { console.error("[CHATBOT] Message log element not found!"); return; }
+      const messageLineDiv = document.createElement('div');
+      messageLineDiv.classList.add('chat-text-line'); 
+      messageLineDiv.classList.add(sender === 'user' ? 'user-text' : 'bot-text');
+      if (sender === 'bot') {
+        const speakerLabel = document.createElement('strong');
+        const charName = characters[currentCharacterId] ? characters[currentCharacterId].name : "챗봇";
+        speakerLabel.textContent = charName + ": "; 
+        messageLineDiv.appendChild(speakerLabel);
+      }
+      messageLineDiv.appendChild(document.createTextNode(message));
+      messageLogEl.appendChild(messageLineDiv);
+      const MAX_LOG_MESSAGES = 7; 
+      while (messageLogEl.children.length > MAX_LOG_MESSAGES) {
+        messageLogEl.removeChild(messageLogEl.firstChild);
+      }
+      requestAnimationFrame(() => { messageLogEl.scrollTop = messageLogEl.scrollHeight; });
+    }
+
+    async function sendMessageToFloatingBot(message) {
+      console.log('[CHATBOT] sendMessageToFloatingBot called.');
+      displayRawTextMessage(message, 'user'); 
+      if (chatbotChatInputEl) {
+          chatbotChatInputEl.value = ''; 
+      }
+      try {
+        const response = await fetch('/api/chatbot', { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', },
+          body: JSON.stringify({ message: message, character: currentCharacterId }), 
+        });
+        if (!response.ok) { 
+          const errorData = await response.json().catch(() => ({ error: `서버 응답 오류: ${response.status}` }));
+          throw new Error(errorData.error || `Error: ${response.status}`);
+        }
+        const data = await response.json();
+        displayRawTextMessage(data.reply || data.error || "알 수 없는 응답입니다.", 'bot'); 
+      } catch (error) { 
+        displayRawTextMessage('챗봇 서버 연결에 문제가 발생했습니다: ' + error.message, 'bot');
+        console.error('[CHATBOT] Fetch error:', error);
+      }
+
+      if (chatbotChatInputEl) {
+          console.log('[CHATBOT] Blurring input after sending message.');
+          chatbotChatInputEl.blur(); 
+      }
+    }
+    
+    ferrisCharImages.forEach((img, index) => {
+        img.addEventListener('click', () => {
+            if (index !== currentCharacterIndex) {
+                 updateChatbotUIForCharacter(index);
+            }
+        });
+    });
+
+    if (chatbotChatSendBtnEl && chatbotChatInputEl) {
+        chatbotChatSendBtnEl.addEventListener('click', () => {
+          console.log('[CHATBOT] Send button clicked.');
+          const message = chatbotChatInputEl.value.trim();
+          if (message) {
+            sendMessageToFloatingBot(message); 
+          } else {
+            console.log('[CHATBOT] Send button clicked (empty message), blurring input.');
+            chatbotChatInputEl.blur(); 
+          }
+        });
+        chatbotChatInputEl.addEventListener('keypress', (event) => {
+          if (event.key === 'Enter') {
+            console.log('[CHATBOT] Enter key pressed.');
+            event.preventDefault(); 
+            const message = chatbotChatInputEl.value.trim();
+            if (message) {
+              sendMessageToFloatingBot(message); 
+            }
+          }
+        });
+    }
+    // --- 플로팅 챗봇 JavaScript 로직 끝 ---
+    
+    // --- 페이지 로드 시 초기화 ---
     document.addEventListener('DOMContentLoaded', function() {
-      fetchQuestions();
+      fetchQuestions(); 
+      updateChatbotUIForCharacter(currentCharacterIndex); 
+      console.log('[APP] DOMContentLoaded, app initialized.');
+
+      if (!chatbotChatInputEl) console.error("[APP] CRITICAL: chatbotChatInputEl not found on DOMContentLoaded!");
+      if (!surveyPage) console.error("[APP] CRITICAL: surveyPage (.survey-page.active) not found on DOMContentLoaded!");
+      if (!floatingChatbotUI) console.error("[APP] CRITICAL: floatingChatbotUI not found on DOMContentLoaded!");
+      if (!appElement) console.error("[APP] CRITICAL: appElement (#app) not found on DOMContentLoaded!");
     });
   </script>
   
-  <script src="script.js"></script>
+  <script src="script.js"></script> 
   
-  <!-- Vercel Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
   <script defer src="/_vercel/insights/script.js"></script>
 </body>
-</html> 
+</html>
