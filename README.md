@@ -101,4 +101,4 @@ To view analytics:
 
 ## Credits
 
-[Your name/organization] 
+[sunshade8/organization] 

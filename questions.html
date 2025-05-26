@@ -56,6 +56,10 @@
     box-sizing: border-box; /* padding을 포함하여 width/height 계산 */
   }
 
+  .question-text {
+    text-align: center;
+  }
+
   /* 원래 .submit-btn 스타일. 이 버튼은 이제 직접 보이지 않게 됩니다. */
   .submit-btn {
     bottom: 300px !important; 
@@ -101,7 +105,10 @@
 }
 
     #floating-chatbot-ui {
-      position: fixed; bottom: 20px; right: 20px;
+      position: fixed; 
+      bottom: 20px; 
+      left: 50%; /* Changed from right: 20px */
+      transform: translateX(-50%); /* Added for horizontal centering */
       width: 330px; 
       z-index: 1000;
       display: flex; flex-direction: column; align-items: center; 
@@ -492,9 +499,9 @@
     const ferrisCharImages = Array.from(ferrisWheelEl.querySelectorAll('.ferris-char-img')); 
 
     const characters = {
-      "lee_jae_myung": { name: "이재명", image: "images/leejaemyung.png", greeting: "안녕하세요. 이재명입니다." },
-      "kim_moon_soo": { name: "김문수", image: "images/kimmoonsoo.png", greeting: "반갑습니다. 김문수입니다." }, 
-      "lee_jun_seok": { name: "이준석", image: "images/leejunseok.png", greeting: "안녕하십니까. 이준석입니다." }  
+      "lee_jae_myung": { name: "이재명", image: "images/leejaemyung.png", greeting: "안녕하세요. 이재명 봇입니다." },
+      "kim_moon_soo": { name: "김문수", image: "images/kimmoonsoo.png", greeting: "반갑습니다. 김문수 봇입니다." }, 
+      "lee_jun_seok": { name: "이준석", image: "images/leejunseok.png", greeting: "안녕하십니까. 이준석 봇입니다." }  
     };
     const characterOrder = ferrisCharImages.map(img => img.dataset.charId);
     let currentCharacterIndex = 0; 
@@ -547,7 +554,7 @@
             img.classList.remove('active');
             if (index === currentCharacterIndex) {
                 img.classList.add('active');
-                img.style.transform = 'scale(1.25)'; 
+                img.style.transform = 'scale(1.25)';
                 img.style.opacity = '1';
             } else {
                 const offset = index - currentCharacterIndex;
@@ -577,7 +584,7 @@
       const charData = characters[currentCharacterId];
       if (!charData) { console.error(`[CHATBOT] Character data for ${currentCharacterId} not found.`); return; }
       updateFerrisWheelDisplay();
-      if (chatbotChatInputEl) chatbotChatInputEl.placeholder = `가상의 봇일 뿐 실제와 다릅니다`;
+      if (chatbotChatInputEl) chatbotChatInputEl.placeholder = `학습된 데이터로 만들어진 봇입니다`;
       if (messageLogEl) messageLogEl.innerHTML = ''; 
       displayRawTextMessage(charData.greeting, 'bot'); 
     }
