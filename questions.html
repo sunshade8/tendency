@@ -9,85 +9,73 @@
   <style>
     /* ========================================================================== */
     /* === 이 <style> 블록은 오직 플로팅 챗봇 UI만을 위한 CSS입니다. === */
-    /* === 페이지 전체 배경이 검은색이라고 가정하고, 챗봇 UI는 배경/테두리 없이 글씨만 보이도록 합니다. === */
     /* ========================================================================== */
 
     body {
-      background-color: #000000 !important; 
-      color: #FFFFFF !important; 
-      padding-bottom: 280px; 
+      background-color: #000000 !important;
+      color: #FFFFFF !important;
+      padding-bottom: 280px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       overflow-x: hidden;
-      position: relative; 
-      min-height: 100%; 
-    }
-
-    #app { 
-        /* Styles for #app if any specific ones were intended */
+      position: relative;
+      min-height: 100%;
     }
 
     .survey-page {
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        padding-bottom: 320px !important; 
-        
-        /* === CRITICAL: This line MUST remain commented out or removed === */
-        /* height: calc(100vh - 50px); */ 
-        
+        padding-bottom: 320px !important;
         -webkit-overflow-scrolling: touch;
     }
 
   #questions-container {
     position: relative;
     width: 100%;
-    padding-top: 50px; /* Reduced from 70px */
+    padding-top: 50px;
   }
 
   .question-container {
-    position: relative !important; 
+    position: relative !important;
     top: auto !important;
     left: auto !important;
     transform: none !important;
-    margin-bottom: 40px; /* 각 질문 컨테이너 사이의 하단 여백 */
+    margin-bottom: 40px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-sizing: border-box; /* padding을 포함하여 width/height 계산 */
+    box-sizing: border-box;
   }
 
   .question-text {
     text-align: center;
   }
 
-  /* 원래 .submit-btn 스타일. 이 버튼은 이제 직접 보이지 않게 됩니다. */
   .submit-btn {
-    bottom: 300px !important; 
+    bottom: 300px !important;
   }
-
 
   .progress-bar-bottom {
-    z-index: 500; 
+    z-index: 500;
   }
-
 
   @media screen and (max-width: 392px) {
     .survey-page {
-      padding-bottom: 320px !important; 
+      padding-bottom: 320px !important;
     }
-    .submit-btn { 
+    .submit-btn {
       bottom: 280px !important;
     }
     #questions-container {
-      padding-top: 30px; /* Reduced from 50px */
+      padding-top: 30px;
     }
   }
 
   @media screen and (max-height: 700px) {
     .survey-page {
-      padding-bottom: 260px !important; 
+      padding-bottom: 260px !important;
     }
-    .submit-btn { 
+    .submit-btn {
       bottom: 240px !important;
     }
     #character-ferris-wheel {
@@ -105,112 +93,160 @@
 }
 
     #floating-chatbot-ui {
-      position: fixed; 
-      bottom: 20px; 
-      left: 50%; /* Changed from right: 20px */
-      transform: translateX(-50%); /* Added for horizontal centering */
-      width: 330px; 
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 330px;
       z-index: 1000;
-      display: flex; flex-direction: column; align-items: center; 
-      background-color: transparent; 
+      display: flex; flex-direction: column; align-items: center;
+      background-color: transparent;
       border: none;
       box-shadow: none;
-      padding: 0; 
+      padding: 0;
     }
 
     #character-ferris-wheel {
         display: flex;
         align-items: center;
-        justify-content: center; 
+        justify-content: center;
         width: 100%;
-        margin-bottom: 10px; 
-        height: 110px; 
+        margin-bottom: 10px;
+        height: 110px;
         position: relative;
     }
     .ferris-char-img {
-        height: 70px; 
+        height: 70px;
         width: auto;
         max-width: 60px;
         object-fit: contain;
         cursor: pointer;
         transition: transform 0.3s ease, opacity 0.3s ease;
-        opacity: 0.4; 
-        margin: 0 2px; 
-        filter: drop-shadow(0 1px 2px rgba(255,255,255,0.1)); 
+        opacity: 0.4;
+        margin: 0 2px;
+        filter: drop-shadow(0 1px 2px rgba(255,255,255,0.1));
     }
     .ferris-char-img.active {
-        height: 100px; 
+        height: 100px;
         max-width: 80px;
         opacity: 1;
-        z-index: 10; 
+        z-index: 10;
     }
 
-    #chatbot-message-log { 
-      width: calc(100% - 20px); 
-      max-height: 100px; 
-      overflow-y: auto; 
-      padding: 0; 
-      margin-bottom: 10px; 
-      background-color: transparent; 
-      border-radius: 0; 
-      box-shadow: none; 
-      display: flex; flex-direction: column; gap: 4px; 
-      scrollbar-width: none; -ms-overflow-style: none;  
+    #chatbot-message-log {
+      width: calc(100% - 20px);
+      max-height: 100px;
+      overflow-y: auto;
+      padding: 0;
+      margin-bottom: 10px;
+      background-color: transparent;
+      border-radius: 0;
+      box-shadow: none;
+      display: flex; flex-direction: column; gap: 4px;
+      scrollbar-width: none; -ms-overflow-style: none;
     }
     #chatbot-message-log::-webkit-scrollbar { display: none; }
 
-    .chat-text-line { 
-        font-size: 0.9em; line-height: 1.4; 
-        padding: 1px 0; 
+    .chat-text-line {
+        font-size: 0.9em; line-height: 1.4;
+        padding: 1px 0;
         word-break: break-all;
-        text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 6px rgba(0,0,0,0.5); 
+        text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 6px rgba(0,0,0,0.5);
     }
     .bot-text { color: #FFFFFF; text-align: left; }
     .bot-text strong { font-weight: 600; color: #F0F0F0; }
     .user-text { color: #F0F0F0; text-align: right; }
-    
-    #floating-input-area { 
+
+    #floating-input-area {
       display: flex;
       width: 100%;
-      background-color: rgba(25, 25, 25, 0.88); 
-      padding: 8px; 
-      border-radius: 20px; 
-      border: 1px solid rgba(255,255,255,0.08); 
+      background-color: rgba(25, 25, 25, 0.88);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    #persistent-chat-input { 
+    #persistent-chat-input {
       flex-grow: 1;
-      padding: 8px 12px; 
-      border: none; 
-      border-radius: 16px; 
+      padding: 8px 12px;
+      border: none;
+      border-radius: 16px;
       font-size: 16px;
-      background-color: rgba(10, 10, 10, 0.9); 
-      color: #FFFFFF; 
+      background-color: rgba(10, 10, 10, 0.9);
+      color: #FFFFFF;
       outline: none;
       margin-right: 8px;
     }
-    #persistent-chat-input::placeholder { color: #BBBBBB; } 
+    #persistent-chat-input::placeholder { color: #BBBBBB; }
     #persistent-send-btn {
-      width: 34px; height: 34px; 
-      background-color: rgba(255, 255, 255, 0.15); 
+      width: 34px; height: 34px;
+      background-color: rgba(255, 255, 255, 0.15);
       color: #FFFFFF;
-      border: none; border-radius: 50%; 
+      border: none; border-radius: 50%;
       cursor: pointer; display: flex; justify-content: center; align-items: center;
       font-size: 16px; transition: background-color 0.2s;
     }
-    #persistent-send-btn:hover { background-color: rgba(255, 255, 255, 0.3); } 
+    #persistent-send-btn:hover { background-color: rgba(255, 255, 255, 0.3); }
 
-    /* 마지막 질문 자리에 표시될 버튼 스타일 */
+    /* 입력창 및 버튼 비활성화 시 스타일 */
+    #persistent-chat-input:disabled,
+    #persistent-send-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    /* 캐릭터 답변 준비 중 메시지 스타일 */
+    .bot-typing-indicator {
+      font-size: 0.9em;
+      line-height: 1.4;
+      padding: 1px 0;
+      color: #FFFFFF;
+      text-align: left;
+      text-shadow: 0 0 4px rgba(0,0,0,0.6), 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    .bot-typing-indicator strong { /* 캐릭터 이름 */
+      font-weight: 600;
+      color: #F0F0F0;
+    }
+
+    /* 점점점(...) 애니메이션 스타일 */
+    .bot-typing-indicator .typing-dots span {
+      display: inline-block;
+      opacity: 0;
+      animation: blink-dot 1.4s infinite;
+      font-weight: bold;
+    }
+
+    .bot-typing-indicator .typing-dots span:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .bot-typing-indicator .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .bot-typing-indicator .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink-dot {
+      0%, 100% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
     .final-results-btn-in-place {
-        display: block; 
-        width: 80%; 
-        max-width: 350px; 
-        margin: 0 auto; /* 상하 마진은 부모의 padding으로 조절, 좌우 auto로 중앙 정렬 */
+        display: block;
+        width: 80%;
+        max-width: 350px;
+        margin: 0 auto;
         padding: 15px 20px;
-        background-color: #6c757d; /* 회색 계열 */
+        background-color: #6c757d;
         color: white;
         text-align: center;
         text-decoration: none;
-        border-radius: 50px; 
+        border-radius: 50px;
         font-size: 1.1em;
         font-weight: bold;
         border: none;
@@ -219,14 +255,14 @@
         transition: background-color 0.2s ease, transform 0.2s ease;
     }
     .final-results-btn-in-place:hover {
-        background-color: #5a6268; 
+        background-color: #5a6268;
         transform: translateY(-2px);
     }
     .final-results-btn-in-place:active {
-        background-color: #545b62; 
+        background-color: #545b62;
         transform: translateY(0px);
     }
-    
+
   </style>
 </head>
 <body>
@@ -238,7 +274,7 @@
       <div id="questions-container">
         </div>
       <a href="#" id="check-results-btn" class="submit-btn" style="display: none;">결과 확인하기</a>
-      
+
       <div class="progress-bar-bottom">
         <div class="progress-indicator" id="survey-progress"></div>
       </div>
@@ -255,9 +291,9 @@
     <div id="floating-input-area">
       <input type="text" id="persistent-chat-input" placeholder="질문하세요...">
       <button id="persistent-send-btn">➤</button>
-    </div>
+      </div>
   </div>
-  
+
   <script>
     // --- ★★★ 원본 설문 JavaScript 로직 시작 ★★★ ---
     const state = {
@@ -265,16 +301,16 @@
       surveyAnswers: {},
       surveyProgress: 0
     };
-    
+
     function createQuestions() {
       const questionsContainer = document.getElementById('questions-container');
       if (!questionsContainer) { console.error("Original Survey: Questions container not found!"); return; }
-      questionsContainer.innerHTML = ''; 
+      questionsContainer.innerHTML = '';
       state.surveyQuestions.forEach((question, index) => {
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question-container';
         questionDiv.id = question.id;
-        questionDiv.style.display = index === 0 ? 'flex' : 'none'; 
+        questionDiv.style.display = index === 0 ? 'flex' : 'none';
         questionDiv.innerHTML = `
           <p class="question-text">${formatQuestionText(question.text)}</p>
           <div class="opinion-scale">
@@ -299,39 +335,36 @@
       });
       element.classList.add('selected');
       state.surveyAnswers[questionId] = value;
-      
+
       const currentIndex = state.surveyQuestions.findIndex(q => q.id === questionId);
       const isLastQuestion = currentIndex === state.surveyQuestions.length - 1;
 
-      updateSurveyProgress(); 
+      updateSurveyProgress();
 
       if (isLastQuestion) {
         console.log('[SURVEY] Last question answered. Replacing with button.');
         const currentQuestionEl = document.getElementById(questionId);
         if (currentQuestionEl) {
-          currentQuestionEl.innerHTML = ''; 
-          currentQuestionEl.style.display = 'block'; 
-          // MODIFIED: Increased top/bottom padding to lower the button and give it space
-          // 이전 값: '20px 0' 또는 '20px 0'
-          // 새 값: '50px 15px 30px 15px' (상, 우, 하, 좌) - 버튼 위의 공간을 50px로 늘림
-          currentQuestionEl.style.padding = '50px 15px 30px 15px'; 
+          currentQuestionEl.innerHTML = '';
+          currentQuestionEl.style.display = 'block';
+          currentQuestionEl.style.padding = '50px 15px 30px 15px';
 
           const resultsButtonInPlace = document.createElement('a');
-          resultsButtonInPlace.href = "#"; 
-          resultsButtonInPlace.id = 'dynamic-check-results-btn'; 
-          resultsButtonInPlace.className = 'final-results-btn-in-place'; 
+          resultsButtonInPlace.href = "#";
+          resultsButtonInPlace.id = 'dynamic-check-results-btn';
+          resultsButtonInPlace.className = 'final-results-btn-in-place';
           resultsButtonInPlace.textContent = '결과 확인하기';
-          
+
           resultsButtonInPlace.addEventListener('click', function(e) {
             e.preventDefault();
-            const results = calculateResults(); 
+            const results = calculateResults();
             localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
             localStorage.setItem('surveyResults', JSON.stringify(results));
             console.log("[SURVEY] In-place button: Saved to localStorage, surveyResults =", JSON.stringify(results));
-            window.location.href = '/analyzing'; 
+            window.location.href = '/analyzing';
           });
           currentQuestionEl.appendChild(resultsButtonInPlace);
-          
+
           setTimeout(() => {
             resultsButtonInPlace.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }, 100);
@@ -342,7 +375,7 @@
           const nextQuestionEl = document.getElementById(state.surveyQuestions[currentIndex + 1].id);
           if (currentQuestionEl) currentQuestionEl.style.display = 'none';
           if (nextQuestionEl) {
-            nextQuestionEl.style.display = 'flex'; 
+            nextQuestionEl.style.display = 'flex';
             nextQuestionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
           }
         }, 300);
@@ -352,15 +385,15 @@
     function updateSurveyProgress() {
       const answeredCount = Object.keys(state.surveyAnswers).length;
       const totalQuestions = state.surveyQuestions.length;
-      if (totalQuestions === 0) { state.surveyProgress = 0; } 
+      if (totalQuestions === 0) { state.surveyProgress = 0; }
       else { state.surveyProgress = (answeredCount / totalQuestions) * 100; }
-      
+
       const progressBar = document.getElementById('survey-progress');
       if (progressBar) progressBar.style.width = `${state.surveyProgress}%`;
-      
+
       const originalSubmitBtn = document.getElementById('check-results-btn');
       if (originalSubmitBtn) {
-        originalSubmitBtn.style.display = 'none'; 
+        originalSubmitBtn.style.display = 'none';
       }
     }
 
@@ -368,7 +401,7 @@
       if (!text || text.length < 10) return text;
       const midpoint = Math.floor(text.length / 2);
       let breakIndex = -1;
-      for (let i = 0; i < 10; i++) { 
+      for (let i = 0; i < 10; i++) {
         const checkIndexFwd = text.indexOf(' ', midpoint + i);
         const checkIndexBwd = text.lastIndexOf(' ', midpoint - i);
         if (checkIndexBwd !== -1 && checkIndexBwd > 0) { breakIndex = checkIndexBwd; break; }
@@ -381,15 +414,15 @@
     if (checkResultsBtn) {
         checkResultsBtn.addEventListener('click', function(e) {
           e.preventDefault();
-          const results = calculateResults(); 
+          const results = calculateResults();
           localStorage.setItem('surveyAnswers', JSON.stringify(state.surveyAnswers));
           localStorage.setItem('surveyResults', JSON.stringify(results));
           console.log("[SURVEY] Original fixed button (hidden): Saved to localStorage, surveyResults =", JSON.stringify(results));
-          window.location.href = '/analyzing'; 
+          window.location.href = '/analyzing';
         });
     }
 
-    function calculateResults() { 
+    function calculateResults() {
       const questionsByCategory = {};
       state.surveyQuestions.forEach(question => {
         if (!questionsByCategory[question.category]) { questionsByCategory[question.category] = []; }
@@ -401,21 +434,15 @@
         let totalScore = 0;
         questions.forEach(question => {
           const answer = state.surveyAnswers[question.id] || 3; // Default to middle if not answered
-          
-          // Now: 1 is strongly disagree, 5 is strongly agree
-          // Transform to 0-100 scale where higher means more conservative
           let score;
           if (question.progressiveValue) {
-            // For progressive questions, agreeing (high values) means more progressive (low result)
             score = ((5 - answer) / 4) * 100;
           } else {
-            // For conservative questions, agreeing (high values) means more conservative (high result)
             score = ((answer - 1) / 4) * 100;
           }
-
           totalScore += score;
         });
-        if (questions.length > 0) { results[category] = Math.round(totalScore / questions.length); } 
+        if (questions.length > 0) { results[category] = Math.round(totalScore / questions.length); }
         else { results[category] = 50; }
       });
       const categoryScores = Object.values(results).filter(score => typeof score === 'number');
@@ -458,7 +485,7 @@
         { id: 'q13', text: '유교 사상은 우리 사회의 기본이다', category: 'social', progressiveValue: false },
         { id: 'q14', text: '성별 임금 격차 해소를 위한 법적 조치를 강화해야 한다', category: 'social', progressiveValue: true },
         { id: 'q15', text: '전쟁 난민을 적극적으로 받아들여야 한다', category: 'social', progressiveValue: true },
-        { id: 'q16', text: '인공지능과의 결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },  
+        { id: 'q16', text: '인공지능과의 결혼을 법적으로 인정해야 한다', category: 'social', progressiveValue: true },
         { id: 'q17', text: '경제성장보다 환경보호가 우선되어야 한다', category: 'environment', progressiveValue: true },
         { id: 'q18', text: '원자력 발전은 확대되어야 한다', category: 'environment', progressiveValue: false },
         { id: 'q19', text: '육류 소비에 환경세를 부과해야 한다', category: 'environment', progressiveValue: true },
@@ -473,10 +500,10 @@
       if (typeof defaultQuestions !== 'undefined' && defaultQuestions.length > 0) {
         state.surveyQuestions = defaultQuestions;
         if (questionsContainer) {
-          questionsContainer.innerHTML = ''; 
-          questionsContainer.style.display = 'block'; 
+          questionsContainer.innerHTML = '';
+          questionsContainer.style.display = 'block';
         }
-        createQuestions(); updateSurveyProgress(); 
+        createQuestions(); updateSurveyProgress();
         console.log('[SURVEY] Initialized survey with defaultQuestions. Count:', state.surveyQuestions.length);
       } else {
         console.error('[SURVEY] defaultQuestions array is not defined or is empty.');
@@ -488,23 +515,23 @@
     // --- ★★★ 원본 설문 JavaScript 로직 끝 ★★★ ---
 
     // --- 플로팅 챗봇 JavaScript 로직 시작 ---
-    const messageLogEl = document.getElementById('chatbot-message-log'); 
-    const chatbotChatInputEl = document.getElementById('persistent-chat-input'); 
+    const messageLogEl = document.getElementById('chatbot-message-log');
+    const chatbotChatInputEl = document.getElementById('persistent-chat-input');
     const chatbotChatSendBtnEl = document.getElementById('persistent-send-btn');
     const floatingChatbotUI = document.getElementById('floating-chatbot-ui');
     const surveyPage = document.querySelector('.survey-page.active');
     const appElement = document.getElementById('app');
-    
+
     const ferrisWheelEl = document.getElementById('character-ferris-wheel');
-    const ferrisCharImages = Array.from(ferrisWheelEl.querySelectorAll('.ferris-char-img')); 
+    const ferrisCharImages = Array.from(ferrisWheelEl.querySelectorAll('.ferris-char-img'));
 
     const characters = {
       "lee_jae_myung": { name: "이재명", image: "images/leejaemyung.png", greeting: "안녕하세요. 이재명 봇입니다." },
-      "kim_moon_soo": { name: "김문수", image: "images/kimmoonsoo.png", greeting: "반갑습니다. 김문수 봇입니다." }, 
-      "lee_jun_seok": { name: "이준석", image: "images/leejunseok.png", greeting: "안녕하십니까. 이준석 봇입니다." }  
+      "kim_moon_soo": { name: "김문수", image: "images/kimmoonsoo.png", greeting: "반갑습니다. 김문수 봇입니다." },
+      "lee_jun_seok": { name: "이준석", image: "images/leejunseok.png", greeting: "안녕하십니까. 이준석 봇입니다." }
     };
     const characterOrder = ferrisCharImages.map(img => img.dataset.charId);
-    let currentCharacterIndex = 0; 
+    let currentCharacterIndex = 0;
     let currentCharacterId = characterOrder[currentCharacterIndex];
 
     // --- ADVANCED KEYBOARD HANDLING & SCROLL RESTORATION ---
@@ -513,38 +540,22 @@
 
         chatbotChatInputEl.addEventListener('focus', () => {
             console.log('[CHATBOT] Input focused.');
-            document.body.classList.add('keyboard-is-active'); 
+            document.body.classList.add('keyboard-is-active');
             surveyPageScrollTopBeforeKeyboard = surveyPage.scrollTop;
-            console.log(`[CHATBOT] surveyPage.scrollTop before focus: ${surveyPageScrollTopBeforeKeyboard}`);
         });
 
         chatbotChatInputEl.addEventListener('blur', () => {
             console.log('[CHATBOT] Input blurred.');
             document.body.classList.remove('keyboard-is-active');
-
             setTimeout(() => {
-                console.log('[CHATBOT] Blur timeout: Attempting to restore view.');
-
-                document.body.style.overflow = ''; 
-                if (appElement) {
-                     appElement.style.overflow = ''; 
-                }
-                surveyPage.style.overflowY = 'auto'; 
-
+                document.body.style.overflow = '';
+                if (appElement) { appElement.style.overflow = ''; }
+                surveyPage.style.overflowY = 'auto';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                console.log('[CHATBOT] Window scrolled to top.');
-
                 requestAnimationFrame(() => {
                     surveyPage.scrollTo({ top: 0, behavior: 'smooth' });
-                    console.log('[CHATBOT] surveyPage scrolled to top.');
-                    
-                    console.log(`[CHATBOT] After scroll attempts: window.scrollY=${window.scrollY}, surveyPage.scrollTop=${surveyPage.scrollTop}`);
-                    if(surveyPage) {
-                        console.log(`[CHATBOT] surveyPage offsetHeight: ${surveyPage.offsetHeight}, scrollHeight: ${surveyPage.scrollHeight}`);
-                    }
                 });
-
-            }, 350); 
+            }, 350);
         });
     }
     // --- END OF KEYBOARD HANDLING ---
@@ -559,17 +570,17 @@
             } else {
                 const offset = index - currentCharacterIndex;
                 const distance = Math.abs(offset);
-                const scale = 1 - (distance * 0.25); 
+                const scale = 1 - (distance * 0.25);
                 const opacity = 0.8 - (distance * 0.3);
                 const zIndex = characterOrder.length - distance;
                 let translateX = 0;
-                if (offset === -1 || (offset === characterOrder.length - 1 && currentCharacterIndex === 0) ) { 
-                    translateX = -50; 
-                } else if (offset === 1 || (offset === -(characterOrder.length - 1) && currentCharacterIndex === characterOrder.length-1) ) { 
-                    translateX = 50; 
-                } else { 
+                if (offset === -1 || (offset === characterOrder.length - 1 && currentCharacterIndex === 0) ) {
+                    translateX = -50;
+                } else if (offset === 1 || (offset === -(characterOrder.length - 1) && currentCharacterIndex === characterOrder.length-1) ) {
+                    translateX = 50;
+                } else {
                     translateX = offset > 0 ? 100 : -100;
-                    img.style.opacity = '0'; 
+                    img.style.opacity = '0';
                 }
                 img.style.transform = `translateX(${translateX}px) scale(${Math.max(0.6, scale)})`;
                 img.style.opacity = `${Math.max(0, opacity)}`;
@@ -580,64 +591,123 @@
 
     function updateChatbotUIForCharacter(charIdx) {
       currentCharacterIndex = charIdx;
-      currentCharacterId = characterOrder[charIdx]; 
+      currentCharacterId = characterOrder[charIdx];
       const charData = characters[currentCharacterId];
       if (!charData) { console.error(`[CHATBOT] Character data for ${currentCharacterId} not found.`); return; }
       updateFerrisWheelDisplay();
       if (chatbotChatInputEl) chatbotChatInputEl.placeholder = `학습된 데이터로 만들어진 봇입니다`;
-      if (messageLogEl) messageLogEl.innerHTML = ''; 
-      displayRawTextMessage(charData.greeting, 'bot'); 
+      if (messageLogEl) messageLogEl.innerHTML = '';
+      displayRawTextMessage(charData.greeting, 'bot');
     }
 
-    function displayRawTextMessage(message, sender) { 
+    function displayRawTextMessage(message, sender) {
       if (!messageLogEl) { console.error("[CHATBOT] Message log element not found!"); return; }
       const messageLineDiv = document.createElement('div');
-      messageLineDiv.classList.add('chat-text-line'); 
+      messageLineDiv.classList.add('chat-text-line');
       messageLineDiv.classList.add(sender === 'user' ? 'user-text' : 'bot-text');
       if (sender === 'bot') {
         const speakerLabel = document.createElement('strong');
         const charName = characters[currentCharacterId] ? characters[currentCharacterId].name : "챗봇";
-        speakerLabel.textContent = charName + ": "; 
+        speakerLabel.textContent = charName + ": ";
         messageLineDiv.appendChild(speakerLabel);
       }
       messageLineDiv.appendChild(document.createTextNode(message));
       messageLogEl.appendChild(messageLineDiv);
-      const MAX_LOG_MESSAGES = 7; 
+      const MAX_LOG_MESSAGES = 7;
       while (messageLogEl.children.length > MAX_LOG_MESSAGES) {
         messageLogEl.removeChild(messageLogEl.firstChild);
       }
       requestAnimationFrame(() => { messageLogEl.scrollTop = messageLogEl.scrollHeight; });
     }
 
+    // <<<<< NEW JAVASCRIPT - Typing Indicator Logic >>>>>
+    let typingIndicatorElement = null; // 현재 표시 중인 "준비 중" 메시지 DOM 요소를 저장
+
+    function showTypingIndicator(characterName) {
+      if (typingIndicatorElement && typingIndicatorElement.parentNode === messageLogEl) { // 이미 있다면 중복 생성 방지
+        messageLogEl.removeChild(typingIndicatorElement); // 이전 것 삭제
+      }
+      const indicatorLineDiv = document.createElement('div');
+      indicatorLineDiv.classList.add('bot-typing-indicator'); // CSS 클래스 적용
+
+      const nameStrong = document.createElement('strong');
+      nameStrong.textContent = characterName + ": ";
+      indicatorLineDiv.appendChild(nameStrong);
+
+      const dotsSpan = document.createElement('span');
+      dotsSpan.classList.add('typing-dots'); // CSS 클래스 적용
+      dotsSpan.innerHTML = '<span>.</span><span>.</span><span>.</span>'; // 애니메이션 될 점들
+      indicatorLineDiv.appendChild(dotsSpan);
+
+      messageLogEl.appendChild(indicatorLineDiv);
+      typingIndicatorElement = indicatorLineDiv; // 생성된 요소 저장
+      requestAnimationFrame(() => { messageLogEl.scrollTop = messageLogEl.scrollHeight; }); // 맨 아래로 스크롤
+    }
+
+    function removeTypingIndicator() {
+      if (typingIndicatorElement && typingIndicatorElement.parentNode === messageLogEl) {
+        messageLogEl.removeChild(typingIndicatorElement);
+      }
+      typingIndicatorElement = null;
+    }
+    // <<<<< END OF NEW JAVASCRIPT >>>>>
+
+
     async function sendMessageToFloatingBot(message) {
       console.log('[CHATBOT] sendMessageToFloatingBot called.');
-      displayRawTextMessage(message, 'user'); 
+      displayRawTextMessage(message, 'user'); // 사용자 메시지 먼저 표시
+
+      // 입력창 및 버튼 비활성화
       if (chatbotChatInputEl) {
-          chatbotChatInputEl.value = ''; 
+          chatbotChatInputEl.value = ''; // 입력창 비우기
+          chatbotChatInputEl.disabled = true;
       }
+      if (chatbotChatSendBtnEl) {
+          chatbotChatSendBtnEl.disabled = true;
+      }
+
+      const charName = characters[currentCharacterId] ? characters[currentCharacterId].name : "챗봇";
+      showTypingIndicator(charName); // "캐릭터명: ..." 타이핑 인디케이터 표시
+
       try {
-        const response = await fetch('/api/chatbot', { 
+        // 실제 API 호출
+        const response = await fetch('/api/chatbot', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', },
-          body: JSON.stringify({ message: message, character: currentCharacterId }), 
+          body: JSON.stringify({ message: message, character: currentCharacterId }),
         });
-        if (!response.ok) { 
+
+        removeTypingIndicator(); // API 응답 직전에 타이핑 인디케이터 제거
+
+        if (!response.ok) {
           const errorData = await response.json().catch(() => ({ error: `서버 응답 오류: ${response.status}` }));
           throw new Error(errorData.error || `Error: ${response.status}`);
         }
         const data = await response.json();
-        displayRawTextMessage(data.reply || data.error || "알 수 없는 응답입니다.", 'bot'); 
-      } catch (error) { 
+        displayRawTextMessage(data.reply || data.error || "알 수 없는 응답입니다.", 'bot'); // 봇 응답 표시
+
+      } catch (error) {
+        removeTypingIndicator(); // 에러 발생 시에도 타이핑 인디케이터 제거
         displayRawTextMessage('챗봇 서버 연결에 문제가 발생했습니다: ' + error.message, 'bot');
         console.error('[CHATBOT] Fetch error:', error);
-      }
-
-      if (chatbotChatInputEl) {
-          console.log('[CHATBOT] Blurring input after sending message.');
-          chatbotChatInputEl.blur(); 
+      } finally {
+        // 타이핑 인디케이터가 혹시 남아있으면 확실히 제거
+        if (typingIndicatorElement) {
+            removeTypingIndicator();
+        }
+        // 입력창 및 버튼 다시 활성화
+        if (chatbotChatInputEl) {
+            chatbotChatInputEl.disabled = false;
+            // chatbotChatInputEl.focus(); // 필요에 따라 입력창에 다시 포커스
+        }
+        if (chatbotChatSendBtnEl) {
+            chatbotChatSendBtnEl.disabled = false;
+        }
+        // 이전 blur 로직은 여기서는 직접 호출하지 않고, 사용자가 다시 입력하려고 할 때 자연스럽게 focus/blur가 일어나도록 둡니다.
+        // 만약 메시지 전송 후 바로 키보드를 내리고 싶다면 chatbotChatInputEl.blur();를 여기에 추가할 수 있습니다.
       }
     }
-    
+
     ferrisCharImages.forEach((img, index) => {
         img.addEventListener('click', () => {
             if (index !== currentCharacterIndex) {
@@ -651,29 +721,30 @@
           console.log('[CHATBOT] Send button clicked.');
           const message = chatbotChatInputEl.value.trim();
           if (message) {
-            sendMessageToFloatingBot(message); 
+            sendMessageToFloatingBot(message);
           } else {
-            console.log('[CHATBOT] Send button clicked (empty message), blurring input.');
-            chatbotChatInputEl.blur(); 
+            // 빈 메시지일 경우, 입력창만 blur 처리 (선택적)
+            // console.log('[CHATBOT] Send button clicked (empty message), blurring input.');
+            // chatbotChatInputEl.blur();
           }
         });
         chatbotChatInputEl.addEventListener('keypress', (event) => {
           if (event.key === 'Enter') {
             console.log('[CHATBOT] Enter key pressed.');
-            event.preventDefault(); 
+            event.preventDefault();
             const message = chatbotChatInputEl.value.trim();
             if (message) {
-              sendMessageToFloatingBot(message); 
+              sendMessageToFloatingBot(message);
             }
           }
         });
     }
     // --- 플로팅 챗봇 JavaScript 로직 끝 ---
-    
+
     // --- 페이지 로드 시 초기화 ---
     document.addEventListener('DOMContentLoaded', function() {
-      fetchQuestions(); 
-      updateChatbotUIForCharacter(currentCharacterIndex); 
+      fetchQuestions();
+      updateChatbotUIForCharacter(currentCharacterIndex);
       console.log('[APP] DOMContentLoaded, app initialized.');
 
       if (!chatbotChatInputEl) console.error("[APP] CRITICAL: chatbotChatInputEl not found on DOMContentLoaded!");
@@ -682,9 +753,9 @@
       if (!appElement) console.error("[APP] CRITICAL: appElement (#app) not found on DOMContentLoaded!");
     });
   </script>
-  
-  <script src="script.js"></script> 
-  
+
+  <script src="script.js"></script>
+
   <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
